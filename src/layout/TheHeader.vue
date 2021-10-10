@@ -1,0 +1,126 @@
+<template>
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">MYLEAGUES</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNavDropdown"
+        aria-controls="navbarNavDropdown"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span
+          class="navbar-toggler-icon"
+          @click.prevent="toggleNavbarCollapse()"
+        ></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <router-link
+              class="nav-link text-white"
+              @click.prevent="toggleNavbarCollapse()"
+              :to="{ name: 'home' }"
+              >Home</router-link
+            >
+          </li>
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link text-white"
+              role="button"
+              data-bs-toggle="dropdown"
+            >
+              My Leagues
+            </a>
+            <ul
+              class="dropdown-menu dropdown-menu-end"
+              aria-labelledby="navbarDropdownMenuLink"
+            >
+              <li v-for="league in leagues" :key="league.id">
+                <router-link
+                  class="dropdown-item"
+                  @click.prevent="toggleNavbarCollapse()"
+                  :to="{ name: 'league', params: { id: league.id } }"
+                  >{{ league.name }}</router-link
+                >
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link text-white"
+              role="button"
+              data-bs-toggle="dropdown"
+            >
+              {{ username }}
+            </a>
+            <ul
+              class="dropdown-menu dropdown-menu-end"
+              aria-labelledby="navbarDropdownMenuLink"
+            >
+              <li><a class="dropdown-item" @click="logout">Logout</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</template>
+
+<script>
+export default {
+  props: ["leagues", "username"],
+  emits: ["toggleNavbar"],
+  data() {
+    return {
+      navbarIsCollapsed: true,
+    };
+  },
+  methods: {
+    logout() {
+      // Collapse the menu
+      this.toggleNavbarCollapse();
+
+      this.$store.dispatch("user/Logout");
+      this.$router.push("login");
+    },
+    toggleNavbarCollapse() {
+      this.navbarIsCollapsed = !this.navbarIsCollapsed;
+
+      // Actually perform the collapse
+      if (this.navbarIsCollapsed === true) {
+        let navbar = document.getElementById("navbarNavDropdown");
+        navbar.classList.remove("show");
+      }
+    },
+  },
+  watch: {
+    navbarIsCollapsed(newValue) {
+      let extraVhForMenu = 15;
+
+      if (newValue === false) {
+        document.documentElement.style.setProperty(
+          "--extra-menu-vh",
+          `${extraVhForMenu}vh`
+        );
+      } else {
+        document.documentElement.style.setProperty("--extra-menu-vh", 0);
+      }
+    },
+  },
+};
+</script>
+
+<style>
+.nav-item {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+.navbar {
+  background: rgba(35, 70, 130, 40%) !important;
+  box-shadow: 0 0.025rem #000000 !important;
+  min-height: calc(var(--vh, 1vh) * 7.5) !important;
+}
+</style>
