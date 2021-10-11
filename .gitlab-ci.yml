@@ -24,12 +24,13 @@ stages: # List of stages for jobs, and their order of execution
 eslint:
   stage: lint
   script:
-    - npm install -g @vue/cli
+    - npm install
     - npm run lint
 
 unittest:
   stage: test
   script:
+    - npm install
     - npm run test:unit
 
 build: # This job runs in the build stage, which runs first.
