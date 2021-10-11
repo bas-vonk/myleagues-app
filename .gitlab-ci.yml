@@ -36,6 +36,7 @@ unittest:
 build: # This job runs in the build stage, which runs first.
   stage: build
   script:
+    - npm install
     - npm run build
   artifacts:
     paths:
@@ -49,4 +50,4 @@ deploy:
     - main
   script:
     - gcloud auth activate-service-account --key-file=$GCP_SERVICE_ACCOUNT
-    - gcloud app deploy
+    - gcloud --quiet --project myleagues app deploy
