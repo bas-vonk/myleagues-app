@@ -24,6 +24,7 @@ stages: # List of stages for jobs, and their order of execution
 eslint:
   stage: lint
   script:
+    - npm install -g @vue/cli
     - npm run lint
 
 unittest:
