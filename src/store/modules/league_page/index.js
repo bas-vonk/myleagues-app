@@ -4,6 +4,7 @@ const state = {
   joinCode: undefined,
   leagueId: undefined,
   name: undefined,
+  ranking_system: undefined,
   matches: [],
   players: [],
   ranking: [],
@@ -13,6 +14,7 @@ const getters = {
   joinCode: state => state.joinCode,
   leagueId: state => state.leagueId,
   name: state => state.name,
+  rankingSystem: state => state.rankingSystem,
   matches: state => state.matches,
   players: state => state.players,
   ranking: state => state.ranking,
@@ -33,6 +35,7 @@ const actions = {
       .then(response => {
         league = response.data.data.attributes;
         commit("setName", league.name);
+        commit("setRankingSystem", league.ranking_system);
         commit("setLeagueId", league.id);
         commit("setJoinCode", league.join_code);
         commit("setMatches", league.matches);
@@ -68,6 +71,9 @@ const mutations = {
   },
   setName(state, name) {
     state.name = name;
+  },
+  setRankingSystem(state, rankingSystem) {
+    state.rankingSystem = rankingSystem;
   },
   setLeagueId(state, leagueId) {
     state.leagueId = leagueId;

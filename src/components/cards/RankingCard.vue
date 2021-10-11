@@ -2,7 +2,7 @@
   <div class="card text-white bg-primary mb-3">
     <div class="card-header">
       <div class="row">
-        <div class="header-text"></div>
+        <div class="header-text" id="rankingSystem">{{ rankingSystem }}</div>
         <div class="header-text">Ranking</div>
         <div class="header-text">
           <button
@@ -57,11 +57,14 @@ export default {
     RankingTable,
     RankingChart
   },
-  props: ["leagueId", "ranking", "username", "joinCode"]
+  props: ["leagueId", "ranking", "username", "joinCode", "rankingSystem"]
 };
 </script>
 
 <style lang="css" scoped>
+#rankingSystem {
+  opacity: 30%;
+}
 button {
   background-color: #f79e02;
   border-style: none;

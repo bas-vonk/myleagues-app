@@ -23,6 +23,7 @@
       <div class="borders col-md-7 extra-padding">
         <ranking-card
           :ranking="ranking"
+          :rankingSystem="rankingSystem"
           :username="username"
           :joinCode="joinCode"
           :leagueId="id"
@@ -45,16 +46,16 @@ export default {
   components: {
     SubmitResultCardSingles,
     AllMatchesCard,
-    RankingCard,
+    RankingCard
   },
   async beforeRouteUpdate(to) {
     await store.dispatch("league_page/GetForIdAndStore", {
-      leagueId: to.params.id,
+      leagueId: to.params.id
     });
   },
   async beforeRouteEnter(to) {
     await store.dispatch("league_page/GetForIdAndStore", {
-      leagueId: to.params.id,
+      leagueId: to.params.id
     });
   },
   computed: {
@@ -76,7 +77,12 @@ export default {
     ranking() {
       return store.getters["league_page/ranking"];
     },
-  },
+    rankingSystem() {
+      return store.getters["league_page/rankingSystem"]
+        .replace(/_/g, " ")
+        .toUpperCase();
+    }
+  }
 };
 </script>
 
