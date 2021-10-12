@@ -63,7 +63,7 @@ export default {
 
 <style lang="css" scoped>
 #rankingSystem {
-  opacity: 30% !important;
+  opacity: 0.3 !important;
 }
 button {
   background-color: #f79e02;
