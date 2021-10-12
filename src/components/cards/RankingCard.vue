@@ -34,13 +34,13 @@ export default {
   data() {
     return {
       mode: "table",
-      rankingHistory: []
+      rankingHistory: [],
     };
   },
   methods: {
     toggleTableChart() {
       this.mode = this.mode === "chart" ? "table" : "chart";
-    }
+    },
   },
   computed: {
     showTable() {
@@ -51,19 +51,19 @@ export default {
     },
     buttonText() {
       return this.mode === "chart" ? "Table" : "Chart";
-    }
+    },
   },
   components: {
     RankingTable,
-    RankingChart
+    RankingChart,
   },
-  props: ["leagueId", "ranking", "username", "joinCode", "rankingSystem"]
+  props: ["leagueId", "ranking", "username", "joinCode", "rankingSystem"],
 };
 </script>
 
 <style lang="css" scoped>
 #rankingSystem {
-  opacity: 30%;
+  opacity: 30% !important;
 }
 button {
   background-color: #f79e02;
