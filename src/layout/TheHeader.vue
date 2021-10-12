@@ -26,6 +26,14 @@
               >Home</router-link
             >
           </li>
+          <li class="nav-item">
+            <a
+              href="https://github.com/bas-vonk/myleagues-app/issues"
+              class="nav-link text-white"
+              target="_blank"
+              >Feedback</a
+            >
+          </li>
           <li class="nav-item dropdown">
             <a
               class="nav-link text-white"
@@ -98,6 +106,12 @@ export default {
   },
   watch: {
     navbarIsCollapsed(newValue) {
+      // If not on mobile mode, do nothing (collapse navbar doesn't exist)
+      // TODO: Use some proper indicator to check for mobile mode (instead of >1000)
+      if (window.innerWidth > 1000) {
+        return;
+      }
+
       let extraVhForMenu = 15;
 
       if (newValue === false) {

@@ -48,7 +48,7 @@ export default {
   padding-left: 5%;
   padding-right: 5%;
   overflow: scroll;
-  height: calc(var(--vh, 1vh) * 90);
+  height: calc(var(--vh, 1vh) * 85);
   width: 100vw;
 }
 .extra-padding {

@@ -46,16 +46,16 @@ export default {
   components: {
     SubmitResultCardSingles,
     AllMatchesCard,
-    RankingCard
+    RankingCard,
   },
   async beforeRouteUpdate(to) {
     await store.dispatch("league_page/GetForIdAndStore", {
-      leagueId: to.params.id
+      leagueId: to.params.id,
     });
   },
   async beforeRouteEnter(to) {
     await store.dispatch("league_page/GetForIdAndStore", {
-      leagueId: to.params.id
+      leagueId: to.params.id,
     });
   },
   computed: {
@@ -81,8 +81,8 @@ export default {
       return store.getters["league_page/rankingSystem"]
         .replace(/_/g, " ")
         .toUpperCase();
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -101,7 +101,7 @@ export default {
   padding-left: 5%;
   padding-right: 5%;
   overflow: scroll;
-  max-height: calc(var(--vh, 1vh) * 90);
+  max-height: calc(var(--vh, 1vh) * 85);
   width: 100vw;
 }
 .extra-padding {
