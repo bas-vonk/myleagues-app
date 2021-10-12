@@ -10,18 +10,18 @@ const actions = {
         "league",
         {
           name: payload.name,
-          ranking_system: payload.ranking_system
+          ranking_system: payload.rankingSystem,
         },
         {
           headers: {
-            Authorization: `Bearer ${rootGetters["user/accessToken"]}`
-          }
+            Authorization: `Bearer ${rootGetters["user/accessToken"]}`,
+          },
         }
       )
-      .then(response => {
+      .then((response) => {
         league = response.data.data.attributes;
       })
-      .catch(error => {
+      .catch((error) => {
         // TODO
         console.log(error);
       });
@@ -33,18 +33,18 @@ const actions = {
       .get("league/", {
         params: { "filter[join_code]": payload.joinCode },
         headers: {
-          Authorization: `Bearer ${rootGetters["user/accessToken"]}`
-        }
+          Authorization: `Bearer ${rootGetters["user/accessToken"]}`,
+        },
       })
-      .then(response => {
+      .then((response) => {
         league = response.data.data.attributes;
       })
-      .catch(error => {
+      .catch((error) => {
         // TODO
         console.log(error);
       });
     return league;
-  }
+  },
 };
 const mutations = {};
 export default {
@@ -52,5 +52,5 @@ export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };
