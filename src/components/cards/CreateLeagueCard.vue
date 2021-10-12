@@ -14,17 +14,14 @@
           </div>
           <div class="form-group">
             <select class="form-control" v-model="rankingSystem">
-              <option disabled selected value=""
-                >Select the ranking system.</option
-              >
+              <option disabled selected value="">
+                Select the ranking system.
+              </option>
               <option value="regular">Regular</option>
-              <option value="complex">Complex</option>
-              <option value="duos">Duos</option>
+              <option value="perron_frobenius">Perron-Frobenius</option>
             </select>
           </div>
-          <button type="submit" class="btn btn-primary">
-            Create
-          </button>
+          <button type="submit" class="btn btn-primary">Create</button>
         </form>
       </div>
       <div v-if="isCreatedView">
@@ -46,20 +43,20 @@ export default {
       leagueId: undefined,
       leagueName: "",
       rankingSystem: "",
-      joinCode: undefined
+      joinCode: undefined,
     };
   },
   methods: {
     async submitForm() {
       let league = await this.$store.dispatch("league/Create", {
         name: this.leagueName,
-        rankingSystem: this.rankingSystem
+        rankingSystem: this.rankingSystem,
       });
 
       this.leagueId = league.id;
 
       await this.$store.dispatch("user_leagues/JoinLeague", {
-        leagueId: this.leagueId
+        leagueId: this.leagueId,
       });
 
       this.joinCode = league.join_code;
@@ -70,8 +67,8 @@ export default {
       this.leagueName = "";
       this.rankingSystem = "";
       this.joinCode = "";
-    }
-  }
+    },
+  },
 };
 </script>
 

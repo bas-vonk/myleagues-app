@@ -62,7 +62,7 @@ export default {
   width: 100vw;
   /* --extra-menu-vh is set in the Header component. */
   height: calc(var(--vh, 1vh) * 100 + var(--extra-menu-vh, 0vh));
-  background-image: url("assets/background_tennis1.jpeg");
+  background-image: url("assets/background.jpeg");
   background-size: cover;
   background-position: 50% 60%;
   background-attachment: local;
