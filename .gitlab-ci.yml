@@ -43,7 +43,7 @@ e2e-test:
 build: # This job runs in the build stage, which runs first.
   stage: build
   script:
-    - npm install --only=production
+    - npm install
     - npm run build
   artifacts:
     paths:
