@@ -17,7 +17,7 @@
               type="button"
               class="btn-close"
               aria-label="Close"
-              v-on:click="$emit('closeModal')"
+              v-on:click="$emit('closingClick')"
             ></button>
           </div>
           <div class="modal-body">Explanation on ranking systems.</div>
@@ -25,7 +25,7 @@
             <button
               type="button"
               class="btn btn-secondary"
-              v-on:click="$emit('closeModal')"
+              v-on:click="$emit('closingClick')"
             >
               Close
             </button>
@@ -44,7 +44,7 @@
 <script>
 export default {
   name: "InformationModal",
-  emits: ["closeModal"],
+  emits: ["closingClick"],
   props: {
     showModal: Boolean,
   },
@@ -63,14 +63,10 @@ export default {
   },
   methods: {
     clickOnOpenModal(event) {
-      console.log(event.target);
-      console.log(event.currentTarget);
-
       // This is false if you click one of the elements inside the 'modal' class
       // So if you click inside 'modal' and outside 'modal-dialog', this is true
       if (event.target === event.currentTarget) {
-        return;
-        // this.showModal = false;
+        this.$emit("closingClick");
       }
     },
   },

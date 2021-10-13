@@ -38,7 +38,7 @@
   </div>
   <information-modal
     :showModal="showModal"
-    @closeModal="closeInformationModal"
+    @closingClick="closeInformationModal"
   ></information-modal>
 </template>
 
