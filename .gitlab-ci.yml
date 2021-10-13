@@ -33,6 +33,12 @@ unittest:
     - npm install
     - npm run test:unit
 
+e2e-test:
+  stage: test
+  script:
+    - npm install
+    - npm run test:e2e
+
 build: # This job runs in the build stage, which runs first.
   stage: build
   script:

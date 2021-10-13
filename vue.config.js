@@ -3,6 +3,11 @@ module.exports = {
     host: "0.0.0.0",
     hot: true,
     disableHostCheck: true,
-    https: false
-  }
+    https: false,
+  },
+  configureWebpack: {
+    output: {
+      filename: "js/[name]-[hash].js",
+    },
+  },
 };
