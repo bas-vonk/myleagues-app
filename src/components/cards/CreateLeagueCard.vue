@@ -20,6 +20,10 @@
               <option value="regular">Regular</option>
               <option value="perron_frobenius">Perron-Frobenius</option>
             </select>
+            <info-circle
+              id="infoIcon"
+              @click="showInformationModal"
+            ></info-circle>
           </div>
           <button type="submit" class="btn btn-primary">Create</button>
         </form>
@@ -32,13 +36,25 @@
       </div>
     </div>
   </div>
+  <information-modal
+    :showModal="showModal"
+    @closeModal="closeInformationModal"
+  ></information-modal>
 </template>
 
 <script>
+import InfoCircle from "@/components/icons/InfoCircle.vue";
+import InformationModal from "@/components/modals/InformationModal.vue";
+
 export default {
   name: "CreateLeagueCard",
+  components: {
+    InfoCircle: InfoCircle,
+    InformationModal: InformationModal,
+  },
   data() {
     return {
+      showModal: false,
       isCreatedView: false,
       leagueId: undefined,
       leagueName: "",
@@ -68,11 +84,24 @@ export default {
       this.rankingSystem = "";
       this.joinCode = "";
     },
+    showInformationModal() {
+      this.showModal = true;
+    },
+    closeInformationModal() {
+      this.showModal = false;
+    },
   },
 };
 </script>
 
 <style lang="css" scoped>
+#infoIcon {
+  top: 56.5%;
+  right: 4.25%;
+  position: absolute;
+  height: 1rem;
+  width: 1rem;
+}
 button {
   background-color: #f79e02;
   border-style: none;
