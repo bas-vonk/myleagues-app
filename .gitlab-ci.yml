@@ -35,15 +35,15 @@ unittest:
 
 e2e-test:
   stage: test
-  image: cypress/included:8.6.0
+  image: cypress/base:16.4.0
   script:
     - npm install
-    - npm run test:e2e --browser chrome
+    - npm run test:e2e
 
 build: # This job runs in the build stage, which runs first.
   stage: build
   script:
-    - npm install
+    - npm install --only=production
     - npm run build
   artifacts:
     paths:
