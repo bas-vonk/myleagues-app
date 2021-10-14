@@ -18,6 +18,33 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav ms-auto">
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link text-white"
+              role="button"
+              data-bs-toggle="dropdown"
+            >
+              <span
+                class="flag-icon"
+                :class="`flag-icon-${iso3166CountryCodeFromActiveLocale}`"
+              ></span>
+            </a>
+            <ul
+              class="dropdown-menu dropdown-menu-end"
+              aria-labelledby="navbarDropdownMenuLink"
+            >
+              <li>
+                <a class="dropdown-item" @click="setLocale('en')">
+                  <span class="flag-icon flag-icon-gb"></span> English
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" @click="setLocale('nl')">
+                  <span class="flag-icon flag-icon-nl"></span> Nederlands
+                </a>
+              </li>
+            </ul>
+          </li>
           <li class="nav-item">
             <router-link
               class="nav-link text-white"
@@ -87,6 +114,10 @@ export default {
     };
   },
   methods: {
+    setLocale(locale) {
+      this.$root.$i18n.locale = locale;
+      this.$store.dispatch("user/SetLocale", { locale: locale });
+    },
     logout() {
       // Collapse the menu
       this.toggleNavbarCollapse();
@@ -102,6 +133,21 @@ export default {
         let navbar = document.getElementById("navbarNavDropdown");
         navbar.classList.remove("show");
       }
+    },
+  },
+  computed: {
+    iso3166CountryCodeFromActiveLocale() {
+      let locale = this.$root.$i18n.locale;
+      let fallBackCountryCode = "gb";
+
+      let iso639to3166 = {
+        nl: "nl",
+        en: "gb",
+      };
+
+      let iso3166CountryCode = iso639to3166[locale];
+
+      return iso3166CountryCode ? iso3166CountryCode : fallBackCountryCode;
     },
   },
   watch: {

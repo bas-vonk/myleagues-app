@@ -6,13 +6,15 @@ const state = {
   accessToken: Cookies.get("accessToken"),
   username: undefined,
   password: undefined,
-  emailAddress: undefined
+  emailAddress: undefined,
+  locale: Cookies.get("locale"),
 };
 const getters = {
-  accessToken: state => state.accessToken,
-  isLoggedIn: state => !!state.accessToken,
-  emailAddress: state => state.emailAddress,
-  username: state => state.username
+  accessToken: (state) => state.accessToken,
+  isLoggedIn: (state) => !!state.accessToken,
+  emailAddress: (state) => state.emailAddress,
+  username: (state) => state.username,
+  locale: (state) => state.locale,
 };
 const actions = {
   Logout({ dispatch, commit }) {
@@ -26,14 +28,14 @@ const actions = {
     await axios
       .post("login", {
         email: payload.emailAddress,
-        password: payload.password
+        password: payload.password,
       })
-      .then(response => {
+      .then((response) => {
         dispatch("StoreAccessTokenData", {
-          accessToken: response.data.access_token
+          accessToken: response.data.access_token,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         if (error.response && error.response.status === 403) {
           throw error.response.data.message;
         } else {
@@ -46,14 +48,14 @@ const actions = {
       .post("register", {
         email: payload.emailAddress,
         username: payload.username,
-        password: payload.password
+        password: payload.password,
       })
-      .then(response => {
+      .then((response) => {
         dispatch("StoreAccessTokenData", {
-          accessToken: response.data.access_token
+          accessToken: response.data.access_token,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         if (error.response && error.response.status === 409) {
           throw error.response.data.message;
         } else {
@@ -73,7 +75,13 @@ const actions = {
     let decoded_token = jwt_decode(accessToken);
     commit("setEmailAddress", decoded_token.email_address);
     commit("setUsername", decoded_token.username);
-  }
+  },
+  SetLocale({ commit }, payload) {
+    let locale = payload.locale;
+
+    commit("locale", locale);
+    Cookies.set("locale", locale, { expires: 365 });
+  },
 };
 const mutations = {
   setAccessToken(state, accessToken) {
@@ -90,12 +98,15 @@ const mutations = {
   },
   unsetAccessToken(state) {
     state.accessToken = null;
-  }
+  },
+  setLocale(state, locale) {
+    state.locale = locale;
+  },
 };
 export default {
   namespaced: true,
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };

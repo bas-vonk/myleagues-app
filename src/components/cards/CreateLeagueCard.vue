@@ -1,6 +1,8 @@
 <template>
   <div class="card text-white bg-primary mb-3">
-    <div class="card-header">Create League</div>
+    <div class="card-header">
+      {{ $t("components.cards.createLeagueCard.title") }}
+    </div>
     <div class="card-body">
       <div class="container" v-if="!isCreatedView">
         <form v-on:submit.prevent="submitForm">
@@ -8,18 +10,26 @@
             <input
               type="text"
               class="form-control"
-              placeholder="League name"
+              :placeholder="
+                $t('components.cards.createLeagueCard.leagueNamePlaceholder')
+              "
               v-model="leagueName"
             />
           </div>
           <div class="form-group">
             <select class="form-control" v-model="rankingSystem">
               <option disabled selected value="">
-                Select the ranking system.
+                {{
+                  $t("components.cards.createLeagueCard.selectRankingSystem")
+                }}
               </option>
               <option value="regular">Regular</option>
               <option value="perron_frobenius">Perron-Frobenius</option>
             </select>
+            <info-circle
+              id="infoIcon"
+              @click="showInformationModal"
+            ></info-circle>
           </div>
           <button type="submit" class="btn btn-primary">Create</button>
         </form>
@@ -32,13 +42,25 @@
       </div>
     </div>
   </div>
+  <information-modal
+    :showModal="showModal"
+    @closingClick="closeInformationModal"
+  ></information-modal>
 </template>
 
 <script>
+import InfoCircle from "@/components/icons/InfoCircle.vue";
+import InformationModal from "@/components/modals/InformationModal.vue";
+
 export default {
   name: "CreateLeagueCard",
+  components: {
+    InfoCircle: InfoCircle,
+    InformationModal: InformationModal,
+  },
   data() {
     return {
+      showModal: false,
       isCreatedView: false,
       leagueId: undefined,
       leagueName: "",
@@ -68,11 +90,24 @@ export default {
       this.rankingSystem = "";
       this.joinCode = "";
     },
+    showInformationModal() {
+      this.showModal = true;
+    },
+    closeInformationModal() {
+      this.showModal = false;
+    },
   },
 };
 </script>
 
 <style lang="css" scoped>
+#infoIcon {
+  top: 56.5%;
+  right: 4.25%;
+  position: absolute;
+  height: 1rem;
+  width: 1rem;
+}
 button {
   background-color: #f79e02;
   border-style: none;
