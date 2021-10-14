@@ -18,6 +18,10 @@ export default {
     TheHeader,
   },
   created() {
+    // Set the locale
+    this.setLocaleFromStore();
+
+    // Set the initial window height
     this.setWindowHeight();
 
     // We listen to the resize event
@@ -37,6 +41,10 @@ export default {
     }
   },
   methods: {
+    setLocaleFromStore() {
+      let locale = this.$store.getters["user/locale"];
+      this.$root.$i18n.locale = locale;
+    },
     setWindowHeight() {
       let vh = window.innerHeight * 0.01;
 

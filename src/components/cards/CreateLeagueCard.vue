@@ -1,6 +1,8 @@
 <template>
   <div class="card text-white bg-primary mb-3">
-    <div class="card-header">Create League</div>
+    <div class="card-header">
+      {{ $t("components.cards.createLeagueCard.title") }}
+    </div>
     <div class="card-body">
       <div class="container" v-if="!isCreatedView">
         <form v-on:submit.prevent="submitForm">
@@ -8,14 +10,18 @@
             <input
               type="text"
               class="form-control"
-              placeholder="League name"
+              :placeholder="
+                $t('components.cards.createLeagueCard.leagueNamePlaceholder')
+              "
               v-model="leagueName"
             />
           </div>
           <div class="form-group">
             <select class="form-control" v-model="rankingSystem">
               <option disabled selected value="">
-                Select the ranking system.
+                {{
+                  $t("components.cards.createLeagueCard.selectRankingSystem")
+                }}
               </option>
               <option value="regular">Regular</option>
               <option value="perron_frobenius">Perron-Frobenius</option>

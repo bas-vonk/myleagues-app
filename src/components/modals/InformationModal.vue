@@ -7,12 +7,14 @@
       tabindex="-1"
       role="dialog"
       aria-modal="true"
-      @click="clickOnOpenModal"
+      @click="clickOnModal"
     >
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Modal title</h5>
+            <h5 class="modal-title">
+              {{ $t("components.modals.rankingSystemInformation.title") }}
+            </h5>
             <button
               type="button"
               class="btn-close"
@@ -20,7 +22,11 @@
               v-on:click="$emit('closingClick')"
             ></button>
           </div>
-          <div class="modal-body">Explanation on ranking systems.</div>
+          <div class="modal-body">
+            <div
+              v-html="$t('components.modals.rankingSystemInformation.body')"
+            ></div>
+          </div>
           <div class="modal-footer">
             <button
               type="button"
@@ -33,11 +39,7 @@
         </div>
       </div>
     </div>
-    <div
-      id="backdropDiv"
-      v-if="showModal"
-      class="modal-backdrop fade show"
-    ></div>
+    <div v-if="showModal" class="modal-backdrop fade show"></div>
   </teleport>
 </template>
 
@@ -49,20 +51,16 @@ export default {
     showModal: Boolean,
   },
   watch: {
-    showModal: {
-      handler(newVal) {
-        this.active = newVal;
-        const body = document.querySelector("body");
-        this.showModal
-          ? body.classList.add("modal-open")
-          : body.classList.remove("modal-open");
-      },
-      immediate: true,
-      deep: true,
+    showModal(newVal) {
+      this.active = newVal;
+      const body = document.querySelector("body");
+      this.showModal
+        ? body.classList.add("modal-open")
+        : body.classList.remove("modal-open");
     },
   },
   methods: {
-    clickOnOpenModal(event) {
+    clickOnModal(event) {
       // This is false if you click one of the elements inside the 'modal' class
       // So if you click inside 'modal' and outside 'modal-dialog', this is true
       if (event.target === event.currentTarget) {
@@ -78,17 +76,4 @@ export default {
 };
 </script>
 
-<style>
-/* .modal {
-  z-index: 2000 !important;
-}
-.modal-dialog {
-  z-index: 2010 !important;
-}
-#backdropDiv {
-  z-index: 1999 !important;
-}
-.modal-content {
-  z-index: 2030 !important;
-} */
-</style>
+<style></style>
