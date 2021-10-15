@@ -1,12 +1,17 @@
 <template>
+  <loading-spinner v-if="isLoading"></loading-spinner>
   <canvas id="ranking-chart"></canvas>
 </template>
 
 <script>
 import Chart from "chart.js";
+import LoadingSpinner from "@/components/ui/LoadingSpinner.vue";
 
 export default {
   props: ["leagueId"],
+  components: {
+    LoadingSpinner,
+  },
   data() {
     return {
       isLoading: false,
@@ -48,6 +53,8 @@ export default {
     await this.$store.dispatch("league_page/GetRankingHistory", {
       leagueId: this.leagueId,
     });
+    this.isLoading = false;
+
     let rankingHistory = this.$store.getters["league_page/rankingHistory"];
 
     this.chartData.data.labels = rankingHistory.labels;
@@ -58,8 +65,6 @@ export default {
       ds.borderColor = this.getRandomColor();
       ds.borderWidth = 1;
     }, this);
-
-    this.isLoading = false;
 
     function drawLabels(t) {
       ctx.save();
