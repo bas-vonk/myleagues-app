@@ -1,13 +1,18 @@
 <template>
+  <loading-spinner v-if="isLoading"></loading-spinner>
   <canvas id="ranking-chart"></canvas>
 </template>
 
 <script>
 import Chart from "chart.js";
+import LoadingSpinner from "@/components/ui/LoadingSpinner.vue";
 import { LeagueService } from "@/services/league";
 
 export default {
   props: ["leagueId"],
+  components: {
+    LoadingSpinner,
+  },
   data() {
     return {
       isLoading: false,
@@ -62,6 +67,13 @@ export default {
   },
   async mounted() {
     let rankingHistory = await this.getRankingHistory(this.leagueId);
+    this.isLoading = true;
+    await this.$store.dispatch("league_page/GetRankingHistory", {
+      leagueId: this.leagueId,
+    });
+    this.isLoading = false;
+
+    let rankingHistory = this.$store.getters["league_page/rankingHistory"];
 
     this.chartData.data.labels = rankingHistory.labels;
     this.chartData.data.datasets = rankingHistory.datasets;
