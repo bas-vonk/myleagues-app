@@ -4,6 +4,7 @@
 
 <script>
 import Chart from "chart.js";
+import { LeagueService } from "@/services/league";
 
 export default {
   props: ["leagueId"],
@@ -42,13 +43,25 @@ export default {
 
       return color;
     },
+    async getRankingHistory(leagueId) {
+      let leagueService = new LeagueService();
+      var rankingHistory;
+
+      try {
+        this.isLoading = true;
+        const responseData = await leagueService.get_ranking_history(leagueId);
+        rankingHistory = responseData.data.attributes.ranking_history;
+      } catch (error) {
+        throw error.message;
+      } finally {
+        this.isLoading = false;
+      }
+
+      return rankingHistory;
+    },
   },
   async mounted() {
-    this.isLoading = true;
-    await this.$store.dispatch("league_page/GetRankingHistory", {
-      leagueId: this.leagueId,
-    });
-    let rankingHistory = this.$store.getters["league_page/rankingHistory"];
+    let rankingHistory = await this.getRankingHistory(this.leagueId);
 
     this.chartData.data.labels = rankingHistory.labels;
     this.chartData.data.datasets = rankingHistory.datasets;
@@ -58,8 +71,6 @@ export default {
       ds.borderColor = this.getRandomColor();
       ds.borderWidth = 1;
     }, this);
-
-    this.isLoading = false;
 
     function drawLabels(t) {
       ctx.save();

@@ -37,6 +37,8 @@
 </template>
 
 <script>
+import { LeagueService } from "@/services/league";
+
 export default {
   name: "JoinLeagueCard",
   data() {
@@ -47,15 +49,31 @@ export default {
       isFindLeagueView: true,
       joinCode: undefined,
       leagueId: undefined,
-      leagueName: undefined
+      leagueName: undefined,
     };
   },
   methods: {
+    async getLeagueForJoinCode(joinCode) {
+      let leagueService = new LeagueService();
+      var league;
+
+      let params = { "filter[join_code]": joinCode };
+
+      try {
+        // Start spinner
+        const responseData = await leagueService.read("", params);
+        league = responseData.data.attributes;
+      } catch (error) {
+        throw error.message;
+      } finally {
+        // Stop spinner
+      }
+
+      return league;
+    },
     async submitForm() {
       if (this.isFindLeagueView) {
-        var league = await this.$store.dispatch("league/GetForJoinCode", {
-          joinCode: this.joinCode
-        });
+        let league = await this.getLeagueForJoinCode(this.joinCode);
 
         this.leagueId = league.id;
         this.leagueName = league.name;
@@ -71,7 +89,7 @@ export default {
       } else {
         // Join league action
         await this.$store.dispatch("user_leagues/JoinLeague", {
-          leagueId: this.leagueId
+          leagueId: this.leagueId,
         });
 
         this.isFindLeagueView = false;
@@ -87,7 +105,7 @@ export default {
       this.isJoinCode = undefined;
       this.leagueId = undefined;
       this.leagueName = undefined;
-    }
+    },
   },
   computed: {
     submitButtonText() {
@@ -102,10 +120,10 @@ export default {
       let currentLeagues = this.$store.getters["user_leagues/leagues"];
 
       return currentLeagues.find(
-        currentLeague => currentLeague["join_code"] === this.joinCode
+        (currentLeague) => currentLeague["join_code"] === this.joinCode
       );
-    }
-  }
+    },
+  },
 };
 </script>
 
