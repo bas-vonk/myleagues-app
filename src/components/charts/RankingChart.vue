@@ -67,13 +67,6 @@ export default {
   },
   async mounted() {
     let rankingHistory = await this.getRankingHistory(this.leagueId);
-    this.isLoading = true;
-    await this.$store.dispatch("league_page/GetRankingHistory", {
-      leagueId: this.leagueId,
-    });
-    this.isLoading = false;
-
-    let rankingHistory = this.$store.getters["league_page/rankingHistory"];
 
     this.chartData.data.labels = rankingHistory.labels;
     this.chartData.data.datasets = rankingHistory.datasets;
