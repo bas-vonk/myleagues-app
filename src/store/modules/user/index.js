@@ -1,6 +1,6 @@
-import axios from "axios";
 import jwt_decode from "jwt-decode";
 import Cookies from "js-cookie";
+import { UserService } from "@/services/user";
 
 const state = {
   accessToken: Cookies.get("accessToken"),
@@ -8,6 +8,7 @@ const state = {
   password: undefined,
   emailAddress: undefined,
   locale: Cookies.get("locale"),
+  userService: new UserService(),
 };
 const getters = {
   accessToken: (state) => state.accessToken,
@@ -25,43 +26,41 @@ const actions = {
     dispatch("user_leagues/ResetLeagues", {}, { root: true });
   },
   async Login({ dispatch }, payload) {
-    await axios
-      .post("login", {
-        email: payload.emailAddress,
-        password: payload.password,
-      })
-      .then((response) => {
-        dispatch("StoreAccessTokenData", {
-          accessToken: response.data.access_token,
-        });
-      })
-      .catch((error) => {
-        if (error.response && error.response.status === 403) {
-          throw error.response.data.message;
-        } else {
-          throw "Something went wrong. Try again later.";
-        }
+    let params = {
+      email: payload.emailAddress,
+      password: payload.password,
+    };
+
+    try {
+      // Start spinner
+      const responseData = await state.userService.login(params);
+      dispatch("StoreAccessTokenData", {
+        accessToken: responseData.access_token,
       });
+    } catch (error) {
+      throw error.message;
+    } finally {
+      // Stop spinner
+    }
   },
   async Register({ dispatch }, payload) {
-    await axios
-      .post("register", {
-        email: payload.emailAddress,
-        username: payload.username,
-        password: payload.password,
-      })
-      .then((response) => {
-        dispatch("StoreAccessTokenData", {
-          accessToken: response.data.access_token,
-        });
-      })
-      .catch((error) => {
-        if (error.response && error.response.status === 409) {
-          throw error.response.data.message;
-        } else {
-          throw "Something went wrong. Try again later.";
-        }
+    let params = {
+      email: payload.emailAddress,
+      username: payload.username,
+      password: payload.password,
+    };
+
+    try {
+      // Start spinner
+      const responseData = await state.userService.register(params);
+      dispatch("StoreAccessTokenData", {
+        accessToken: responseData.access_token,
       });
+    } catch (error) {
+      throw error.message;
+    } finally {
+      // Stop spinner
+    }
   },
   StoreAccessTokenData({ commit }, payload) {
     let accessToken = payload.accessToken;

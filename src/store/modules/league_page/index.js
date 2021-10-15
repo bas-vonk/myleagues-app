@@ -1,4 +1,4 @@
-import axios from "axios";
+import { LeagueService } from "@/services/league";
 
 const state = {
   joinCode: undefined,
@@ -8,62 +8,44 @@ const state = {
   matches: [],
   players: [],
   ranking: [],
-  rankingHistory: undefined
+  rankingHistory: undefined,
+  leagueService: new LeagueService(),
 };
 const getters = {
-  joinCode: state => state.joinCode,
-  leagueId: state => state.leagueId,
-  name: state => state.name,
-  rankingSystem: state => state.rankingSystem,
-  matches: state => state.matches,
-  players: state => state.players,
-  ranking: state => state.ranking,
-  rankingHistory: state => state.rankingHistory
+  joinCode: (state) => state.joinCode,
+  leagueId: (state) => state.leagueId,
+  name: (state) => state.name,
+  rankingSystem: (state) => state.rankingSystem,
+  matches: (state) => state.matches,
+  players: (state) => state.players,
+  ranking: (state) => state.ranking,
+  rankingHistory: (state) => state.rankingHistory,
 };
 const actions = {
   AddMatch({ commit }, payload) {
     commit("addMatch", payload);
   },
-  async GetForIdAndStore({ rootGetters, commit }, payload) {
-    var league = undefined;
-    await axios
-      .get(`league/${payload.leagueId}`, {
-        headers: {
-          Authorization: `Bearer ${rootGetters["user/accessToken"]}`
-        }
-      })
-      .then(response => {
-        league = response.data.data.attributes;
-        commit("setName", league.name);
-        commit("setRankingSystem", league.ranking_system);
-        commit("setLeagueId", league.id);
-        commit("setJoinCode", league.join_code);
-        commit("setMatches", league.matches);
-        commit("setPlayers", league.players);
-        commit("setRanking", league.ranking);
-      })
-      .catch(error => {
-        // TODO
-        console.log(error);
-      });
+  async GetForIdAndStore({ commit }, payload) {
+    var league;
+
+    try {
+      // Start spinner
+      const responseData = await state.leagueService.read(payload.leagueId);
+      league = responseData.data.attributes;
+      commit("setName", league.name);
+      commit("setRankingSystem", league.ranking_system);
+      commit("setLeagueId", league.id);
+      commit("setJoinCode", league.join_code);
+      commit("setMatches", league.matches);
+      commit("setPlayers", league.players);
+      commit("setRanking", league.ranking);
+    } catch (error) {
+      throw error.message;
+    } finally {
+      // Stop spinner
+    }
+    return league;
   },
-  async GetRankingHistory({ rootGetters, commit }, payload) {
-    var rankingHistory = undefined;
-    await axios
-      .get(`league/${payload.leagueId}/ranking_history`, {
-        headers: {
-          Authorization: `Bearer ${rootGetters["user/accessToken"]}`
-        }
-      })
-      .then(response => {
-        rankingHistory = response.data.data.attributes.ranking_history;
-        commit("setRankingHistory", rankingHistory);
-      })
-      .catch(error => {
-        // TODO
-        console.log(error);
-      });
-  }
 };
 const mutations = {
   addMatch(state, match) {
@@ -92,12 +74,12 @@ const mutations = {
   },
   setRankingHistory(state, rankingHistory) {
     state.rankingHistory = rankingHistory;
-  }
+  },
 };
 export default {
   namespaced: true,
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };

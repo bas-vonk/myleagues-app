@@ -82,6 +82,7 @@
 
 <script>
 var today = new Date();
+import { MatchService } from "@/services/match";
 
 var dateDefaultValue =
   today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
@@ -106,14 +107,25 @@ export default {
     };
   },
   methods: {
+    async store(match) {
+      let matchService = new MatchService();
+      try {
+        // Start spinner
+        matchService.create(match);
+      } catch (error) {
+        throw error.message;
+      } finally {
+        // Stop spinner
+      }
+    },
     async submitForm() {
-      await this.$store.dispatch("match/Create", {
+      await this.store({
         date: this.date,
-        leagueId: this.leagueId,
-        homePlayerId: this.homePlayerId,
-        homePlayerScore: this.homePlayerScore,
-        awayPlayerId: this.awayPlayerId,
-        awayPlayerScore: this.awayPlayerScore,
+        league_id: this.leagueId,
+        home_player_id: this.homePlayerId,
+        home_score: this.homePlayerScore,
+        away_player_id: this.awayPlayerId,
+        away_score: this.awayPlayerScore,
       });
 
       // Update the league page

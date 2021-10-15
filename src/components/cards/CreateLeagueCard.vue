@@ -70,15 +70,9 @@ export default {
   },
   methods: {
     async submitForm() {
-      let league = await this.$store.dispatch("league/Create", {
+      let league = await this.$store.dispatch("league/CreateAndAdd", {
         name: this.leagueName,
         rankingSystem: this.rankingSystem,
-      });
-
-      this.leagueId = league.id;
-
-      await this.$store.dispatch("user_leagues/JoinLeague", {
-        leagueId: this.leagueId,
       });
 
       this.joinCode = league.join_code;

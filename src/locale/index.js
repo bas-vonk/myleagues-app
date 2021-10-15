@@ -1,4 +1,4 @@
-import { createI18n } from "vue-i18n";
+import { createI18n } from "vue-i18n/index";
 
 import en from "./texts/en.js";
 import nl from "./texts/nl.js";

@@ -1,51 +1,40 @@
-import axios from "axios";
+import { UserService } from "@/services/user";
 
-const state = { leagues: [] };
+const state = { leagues: [], userService: new UserService() };
 const getters = {
-  leagues: state => state.leagues
+  leagues: (state) => state.leagues,
 };
 const actions = {
-  async GetLeaguesForUser({ rootGetters, commit }) {
+  async GetLeaguesForUser({ commit }) {
     commit("resetLeagues");
-    await axios
-      .get("/user/leagues", {
-        headers: {
-          Authorization: `Bearer ${rootGetters["user/accessToken"]}`
-        }
-      })
-      .then(response => {
-        response.data.data.forEach(function(item) {
-          commit("addLeague", item.attributes);
-        });
-      })
-      .catch(error => {
-        // TODO
-        console.log(error);
-      });
-  },
-  async JoinLeague({ rootGetters, commit }, payload) {
-    var league = undefined;
-    await axios
-      .post(
-        "/user/join_league",
-        { league_id: payload.leagueId },
-        {
-          headers: {
-            Authorization: `Bearer ${rootGetters["user/accessToken"]}`
-          }
-        }
-      )
-      .then(response => {
-        league = response.data.data.attributes;
-        commit("addLeague", league);
-      })
-      .catch(error => {
-        // TODO
-        console.log(error);
-      });
 
-    return league;
-  }
+    try {
+      // Start spinner
+      const responseData = await state.userService.get_leagues_for_user();
+
+      responseData.data.forEach(function (item) {
+        commit("addLeague", item.attributes);
+      });
+    } catch (error) {
+      throw error.message;
+    } finally {
+      // Stop spinner
+    }
+  },
+  async JoinLeague({ commit }, payload) {
+    let params = { league_id: payload.leagueId };
+
+    try {
+      // Start spinner
+      const responseData = await state.userService.join_league(params);
+      let league = responseData.data.attributes;
+      commit("addLeague", league);
+    } catch (error) {
+      throw error.message;
+    } finally {
+      // Stop spinner
+    }
+  },
 };
 const mutations = {
   addLeague(state, league) {
@@ -53,12 +42,12 @@ const mutations = {
   },
   resetLeagues(state) {
     state.leagues = [];
-  }
+  },
 };
 export default {
   namespaced: true,
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };

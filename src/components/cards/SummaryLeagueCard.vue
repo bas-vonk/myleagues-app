@@ -42,13 +42,13 @@ export default {
   props: ["league"],
   data() {
     return {
-      isActive: true
+      isActive: true,
     };
   },
   methods: {
     goToLeaguePage() {
       this.$router.push({ name: "league", params: { id: this.league.id } });
-    }
+    },
   },
   computed: {
     username() {
@@ -56,8 +56,8 @@ export default {
     },
     leagueTitle() {
       return this.league.name.toUpperCase();
-    }
-  }
+    },
+  },
 };
 </script>
 

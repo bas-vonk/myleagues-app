@@ -1,48 +1,29 @@
-import axios from "axios";
+import { LeagueService } from "@/services/league";
 
-const state = {};
+const state = { leagueService: new LeagueService() };
 const getters = {};
 const actions = {
-  async Create({ rootGetters }, payload) {
-    var league = undefined;
-    await axios
-      .post(
-        "league",
-        {
-          name: payload.name,
-          ranking_system: payload.rankingSystem,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${rootGetters["user/accessToken"]}`,
-          },
-        }
-      )
-      .then((response) => {
-        league = response.data.data.attributes;
-      })
-      .catch((error) => {
-        // TODO
-        console.log(error);
-      });
-    return league;
-  },
-  async GetForJoinCode({ rootGetters }, payload) {
-    var league = undefined;
-    await axios
-      .get("league/", {
-        params: { "filter[join_code]": payload.joinCode },
-        headers: {
-          Authorization: `Bearer ${rootGetters["user/accessToken"]}`,
-        },
-      })
-      .then((response) => {
-        league = response.data.data.attributes;
-      })
-      .catch((error) => {
-        // TODO
-        console.log(error);
-      });
+  async CreateAndAdd({ commit }, payload) {
+    var league;
+
+    let params = {
+      name: payload.name,
+      ranking_system: payload.rankingSystem,
+    };
+
+    try {
+      // Start spinner
+      const responseData = await state.leagueService.create(params);
+      league = responseData.data.attributes;
+
+      // Add the league to the current leagues for the user
+      commit("user_leagues/addLeague", league, { root: true });
+    } catch (error) {
+      throw error.message;
+    } finally {
+      // Stop spinner
+    }
+
     return league;
   },
 };
