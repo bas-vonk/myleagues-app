@@ -1,5 +1,10 @@
 <template>
   <loading-spinner v-if="isLoading"></loading-spinner>
+  <error-message
+    v-if="isError"
+    :errorMessage="errorMessage"
+    @close="resetView()"
+  ></error-message>
   <div class="container score" v-if="!isLoading && !isAddedView">
     <form v-on:submit.prevent="submitForm">
       <div class="row">
@@ -59,13 +64,6 @@
               </option>
             </select>
           </div>
-          <!-- <div class="row">
-          <input
-            class="form-control form-control-sm"
-            type="text"
-            placeholder="Name"
-          />
-        </div> -->
         </div>
       </div>
       <div class="row">
@@ -73,9 +71,9 @@
       </div>
     </form>
   </div>
-  <div v-if="!isLoading && isAddedView">
+  <div v-if="!isLoading && !isError && isAddedView">
     <div>Match added.</div>
-    <small id="modeAddAnotherMatch" @click="resetIsAddedView()"
+    <small id="modeAddAnotherMatch" @click="resetView()"
       >Add another match.</small
     >
   </div>
@@ -85,6 +83,7 @@
 var today = new Date();
 import { MatchService } from "@/services/match";
 import LoadingSpinner from "@/components/ui/LoadingSpinner.vue";
+import ErrorMessage from "@/components/ui/ErrorMessage.vue";
 
 var dateDefaultValue =
   today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
@@ -100,9 +99,12 @@ export default {
   },
   components: {
     LoadingSpinner: LoadingSpinner,
+    ErrorMessage: ErrorMessage,
   },
   data() {
     return {
+      isError: false,
+      errorMessage: "",
       isLoading: false,
       isAddedView: false,
       date: dateDefaultValue,
@@ -121,7 +123,8 @@ export default {
 
         await matchService.create(match);
       } catch (error) {
-        throw error.message;
+        this.isError = true;
+        this.errorMessage = error.message;
       } finally {
         // Stop spinner
         this.isLoading = false;
@@ -145,7 +148,8 @@ export default {
 
       this.isAddedView = true;
     },
-    resetIsAddedView() {
+    resetView() {
+      this.isError = false;
       this.isAddedView = false;
       this.date = dateDefaultValue;
       this.homePlayerId = "";

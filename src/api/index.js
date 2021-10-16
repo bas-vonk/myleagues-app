@@ -32,9 +32,13 @@ Api.interceptors.response.use(
   },
   (error) => {
     var message;
-    if (!error.response) {
+    if (!error.response || !error.response.data.message) {
+      // This is the case when the backend cannot be reached at all or it returns
+      // some unexpected value
       message = "Something went wrong. Try again later.";
     } else {
+      // This is the case where the backend is reached and returns valid JSON with
+      // 'message' in it
       message = error.response.data.message;
     }
     return Promise.reject({ message: message });

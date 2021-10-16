@@ -5,12 +5,19 @@
     :username="username"
   ></the-header>
   <loading-spinner v-if="isLoading"></loading-spinner>
-  <router-view v-else />
+  <error-message
+    v-if="isError"
+    :errorMessage="errorMessage"
+    @close="resetError()"
+  ></error-message>
+  <router-view v-if="!isLoading && !isError" />
 </template>
 
 <script>
 import TheHeader from "@/components/ui/TheHeader.vue";
 import LoadingSpinner from "@/components/ui/LoadingSpinner.vue";
+import ErrorMessage from "@/components/ui/ErrorMessage.vue";
+
 import { mapGetters } from "vuex";
 import { store } from "@/store";
 
@@ -19,6 +26,7 @@ export default {
   components: {
     TheHeader,
     LoadingSpinner,
+    ErrorMessage,
   },
   created() {
     // Set the locale
@@ -44,6 +52,10 @@ export default {
     }
   },
   methods: {
+    resetError() {
+      this.$store.dispatch("setIsError", false, { root: true });
+      this.$store.dispatch("setErrorMessage", "", { root: true });
+    },
     setLocaleFromStore() {
       let locale = this.$store.getters["user/locale"];
       this.$root.$i18n.locale = locale;
@@ -56,8 +68,10 @@ export default {
   },
   computed: {
     ...mapGetters({
-      isLoggedIn: "user/isLoggedIn",
       isLoading: "isLoading",
+      isError: "isError",
+      errorMessage: "errorMessage",
+      isLoggedIn: "user/isLoggedIn",
       username: "user/username",
       leagues: "user_leagues/leagues",
     }),
