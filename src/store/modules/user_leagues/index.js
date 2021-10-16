@@ -5,11 +5,14 @@ const getters = {
   leagues: (state) => state.leagues,
 };
 const actions = {
-  async GetLeaguesForUser({ commit }) {
+  async GetLeaguesForUserAndAdd({ dispatch, commit }) {
     commit("resetLeagues");
 
     try {
       // Start spinner
+      dispatch("setIsLoading", true, { root: true });
+
+      // Call the service
       const responseData = await state.userService.get_leagues_for_user();
 
       responseData.data.forEach(function (item) {
@@ -19,6 +22,7 @@ const actions = {
       throw error.message;
     } finally {
       // Stop spinner
+      dispatch("setIsLoading", false, { root: true });
     }
   },
   async JoinLeague({ commit }, payload) {

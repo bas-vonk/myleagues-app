@@ -25,11 +25,18 @@ const actions = {
   AddMatch({ commit }, payload) {
     commit("addMatch", payload);
   },
-  async GetForIdAndStore({ commit }, payload) {
+  async GetForIdAndStore({ dispatch, commit }, payload) {
     var league;
 
     try {
-      // Start spinner
+      // Start spinner (if it's not suppressed)
+      // (It can be supressed for instance when a match is added, and the page needs
+      // to be animated)
+      if (!payload.suppressSpinner) {
+        dispatch("setIsLoading", true, { root: true });
+      }
+
+      // Call the service
       const responseData = await state.leagueService.read(payload.leagueId);
       league = responseData.data.attributes;
       commit("setName", league.name);
@@ -43,6 +50,9 @@ const actions = {
       throw error.message;
     } finally {
       // Stop spinner
+      if (!payload.suppressSpinner) {
+        dispatch("setIsLoading", false, { root: true });
+      }
     }
     return league;
   },

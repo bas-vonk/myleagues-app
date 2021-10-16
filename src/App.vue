@@ -4,11 +4,13 @@
     :leagues="leagues"
     :username="username"
   ></the-header>
-  <router-view />
+  <loading-spinner v-if="isLoading"></loading-spinner>
+  <router-view v-else />
 </template>
 
 <script>
-import TheHeader from "./layout/TheHeader.vue";
+import TheHeader from "@/components/ui/TheHeader.vue";
+import LoadingSpinner from "@/components/ui/LoadingSpinner.vue";
 import { mapGetters } from "vuex";
 import { store } from "@/store";
 
@@ -16,6 +18,7 @@ export default {
   name: "App",
   components: {
     TheHeader,
+    LoadingSpinner,
   },
   created() {
     // Set the locale
@@ -37,7 +40,7 @@ export default {
       });
 
       // Get the leagues for a user
-      await store.dispatch("user_leagues/GetLeaguesForUser");
+      await store.dispatch("user_leagues/GetLeaguesForUserAndAdd");
     }
   },
   methods: {
@@ -54,6 +57,7 @@ export default {
   computed: {
     ...mapGetters({
       isLoggedIn: "user/isLoggedIn",
+      isLoading: "isLoading",
       username: "user/username",
       leagues: "user_leagues/leagues",
     }),

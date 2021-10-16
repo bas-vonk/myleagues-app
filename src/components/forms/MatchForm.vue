@@ -1,5 +1,6 @@
 <template>
-  <div class="container score" v-if="!isAddedView">
+  <loading-spinner v-if="isLoading"></loading-spinner>
+  <div class="container score" v-if="!isLoading && !isAddedView">
     <form v-on:submit.prevent="submitForm">
       <div class="row">
         <div class="col">
@@ -72,7 +73,7 @@
       </div>
     </form>
   </div>
-  <div v-if="isAddedView">
+  <div v-if="!isLoading && isAddedView">
     <div>Match added.</div>
     <small id="modeAddAnotherMatch" @click="resetIsAddedView()"
       >Add another match.</small
@@ -83,6 +84,7 @@
 <script>
 var today = new Date();
 import { MatchService } from "@/services/match";
+import LoadingSpinner from "@/components/ui/LoadingSpinner.vue";
 
 var dateDefaultValue =
   today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
@@ -96,8 +98,12 @@ export default {
       type: Array,
     },
   },
+  components: {
+    LoadingSpinner: LoadingSpinner,
+  },
   data() {
     return {
+      isLoading: false,
       isAddedView: false,
       date: dateDefaultValue,
       homePlayerId: "",
@@ -111,11 +117,14 @@ export default {
       let matchService = new MatchService();
       try {
         // Start spinner
-        matchService.create(match);
+        this.isLoading = true;
+
+        await matchService.create(match);
       } catch (error) {
         throw error.message;
       } finally {
         // Stop spinner
+        this.isLoading = false;
       }
     },
     async submitForm() {
@@ -131,6 +140,7 @@ export default {
       // Update the league page
       this.$store.dispatch("league_page/GetForIdAndStore", {
         leagueId: this.leagueId,
+        suppressSpinner: true,
       });
 
       this.isAddedView = true;
@@ -154,9 +164,6 @@ export default {
       if (newHomePlayerId == this.awayPlayerId) {
         this.awayPlayerId = "";
       }
-    },
-    date(newValue) {
-      console.log(newValue);
     },
   },
 };

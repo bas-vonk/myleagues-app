@@ -84,9 +84,8 @@ export default {
         password: this.password,
       });
 
-      // Get the leagues for a user
-      await store.dispatch("user_leagues/GetLeaguesForUser");
-
+      // Get the leagues for a user and navigate to the home page
+      await store.dispatch("user_leagues/GetLeaguesForUserAndAdd");
       this.navigateToHome();
     },
     async register() {
@@ -94,6 +93,7 @@ export default {
         throw "Passwords don't match.";
       }
 
+      // Register the user and go to the home page.
       await this.$store.dispatch("user/Register", {
         emailAddress: this.emailAddress,
         password: this.password,

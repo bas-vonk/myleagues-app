@@ -12,7 +12,6 @@ const actions = {
     };
 
     try {
-      // Start spinner
       const responseData = await state.leagueService.create(params);
       league = responseData.data.attributes;
 
@@ -20,8 +19,6 @@ const actions = {
       commit("user_leagues/addLeague", league, { root: true });
     } catch (error) {
       throw error.message;
-    } finally {
-      // Stop spinner
     }
 
     return league;
