@@ -4,11 +4,13 @@
     :leagues="leagues"
     :username="username"
   ></the-header>
-  <router-view />
+  <loading-spinner v-if="isLoading"></loading-spinner>
+  <router-view v-else />
 </template>
 
 <script>
-import TheHeader from "./layout/TheHeader.vue";
+import TheHeader from "@/components/ui/TheHeader.vue";
+import LoadingSpinner from "@/components/ui/LoadingSpinner.vue";
 import { mapGetters } from "vuex";
 import { store } from "@/store";
 
@@ -16,6 +18,7 @@ export default {
   name: "App",
   components: {
     TheHeader,
+    LoadingSpinner,
   },
   created() {
     // Set the locale
@@ -31,13 +34,19 @@ export default {
   },
   async mounted() {
     if (store.getters["user/accessToken"]) {
+      // Start spinner
+      this.$store.dispatch("setIsLoading", true, { root: true });
+
       // Parse the JWT token and store info in the application state
       store.dispatch("user/StoreAccessTokenData", {
         accessToken: store.getters["user/accessToken"],
       });
 
       // Get the leagues for a user
-      await store.dispatch("user_leagues/GetLeaguesForUser");
+      await store.dispatch("user_leagues/GetLeaguesForUserAndAdd");
+
+      // Start spinner
+      this.$store.dispatch("setIsLoading", false, { root: true });
     }
   },
   methods: {
@@ -54,6 +63,7 @@ export default {
   computed: {
     ...mapGetters({
       isLoggedIn: "user/isLoggedIn",
+      isLoading: "isLoading",
       username: "user/username",
       leagues: "user_leagues/leagues",
     }),

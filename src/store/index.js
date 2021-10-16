@@ -5,8 +5,21 @@ import user from "./modules/user";
 import user_leagues from "./modules/user_leagues";
 
 const store = createStore({
-  state() {
-    return {};
+  state: {
+    isLoading: false,
+  },
+  getters: {
+    isLoading: (state) => state.isLoading,
+  },
+  mutations: {
+    setIsLoading(state, isLoading) {
+      state.isLoading = isLoading;
+    },
+  },
+  actions: {
+    setIsLoading({ commit }, isLoading) {
+      commit("setIsLoading", isLoading);
+    },
   },
   modules: {
     league,

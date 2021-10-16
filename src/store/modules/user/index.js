@@ -32,15 +32,13 @@ const actions = {
     };
 
     try {
-      // Start spinner
+      // Call the service
       const responseData = await state.userService.login(params);
       dispatch("StoreAccessTokenData", {
         accessToken: responseData.access_token,
       });
     } catch (error) {
       throw error.message;
-    } finally {
-      // Stop spinner
     }
   },
   async Register({ dispatch }, payload) {

@@ -5,7 +5,7 @@ const getters = {
   leagues: (state) => state.leagues,
 };
 const actions = {
-  async GetLeaguesForUser({ commit }) {
+  async GetLeaguesForUserAndAdd({ commit }) {
     commit("resetLeagues");
 
     try {
