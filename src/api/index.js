@@ -1,5 +1,5 @@
 import Axios from "axios";
-import { store } from "@/store";
+import Cookies from "js-cookie";
 
 const Api = Axios.create({
   baseURL: process.env.VUE_APP_API_URL,
@@ -7,11 +7,13 @@ const Api = Axios.create({
 });
 
 Api.interceptors.request.use((config) => {
-  // Try to get the JWT token from the logged in state
-  let accessToken = store.getters["user/accessToken"];
+  // Try to get the JWT token from the cookie
+  // Get it from the cookie to avoid circular imports
+  // (Don't interact with the store)
+  let accessToken = Cookies.get("accessToken");
 
   // If access token is found, attach it to the request
-  if (accessToken != null) {
+  if (accessToken) {
     config.headers["Authorization"] = `Bearer ${accessToken}`;
   }
 
