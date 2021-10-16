@@ -32,6 +32,9 @@ const actions = {
     };
 
     try {
+      // Start spinner
+      dispatch("setIsLoading", true, { root: true });
+
       // Call the service
       const responseData = await state.userService.login(params);
       dispatch("StoreAccessTokenData", {
@@ -39,6 +42,9 @@ const actions = {
       });
     } catch (error) {
       throw error.message;
+    } finally {
+      // Stop spinner
+      dispatch("setIsLoading", false, { root: true });
     }
   },
   async Register({ dispatch }, payload) {
@@ -50,6 +56,9 @@ const actions = {
 
     try {
       // Start spinner
+      dispatch("setIsLoading", true, { root: true });
+
+      // Call the service
       const responseData = await state.userService.register(params);
       dispatch("StoreAccessTokenData", {
         accessToken: responseData.access_token,
@@ -58,6 +67,7 @@ const actions = {
       throw error.message;
     } finally {
       // Stop spinner
+      dispatch("setIsLoading", false, { root: true });
     }
   },
   StoreAccessTokenData({ commit }, payload) {

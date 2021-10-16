@@ -3,8 +3,9 @@
     <div class="card-header">
       {{ $t("components.cards.createLeagueCard.title") }}
     </div>
+    <loading-spinner v-if="isLoading"></loading-spinner>
     <div class="card-body">
-      <div class="container" v-if="!isCreatedView">
+      <div class="container" v-if="!isLoading && !isCreatedView">
         <form v-on:submit.prevent="submitForm">
           <div class="form-group">
             <input
@@ -34,7 +35,7 @@
           <button type="submit" class="btn btn-primary">Create</button>
         </form>
       </div>
-      <div v-if="isCreatedView">
+      <div v-if="!isLoading && isCreatedView">
         <div>League created. Join Code: {{ joinCode }}</div>
         <small id="modeCreateAnotherLeague" @click="resetIsCreatedView()"
           >Create another league.</small
@@ -51,15 +52,18 @@
 <script>
 import InfoCircle from "@/components/icons/InfoCircle.vue";
 import InformationModal from "@/components/modals/InformationModal.vue";
+import LoadingSpinner from "@/components/ui/LoadingSpinner.vue";
 
 export default {
   name: "CreateLeagueCard",
   components: {
     InfoCircle: InfoCircle,
     InformationModal: InformationModal,
+    LoadingSpinner: LoadingSpinner,
   },
   data() {
     return {
+      isLoading: false,
       showModal: false,
       isCreatedView: false,
       leagueId: undefined,
@@ -70,10 +74,17 @@ export default {
   },
   methods: {
     async submitForm() {
+      // Start spinner
+      this.isLoading = true;
+
+      // Dispatch the action to the store
       let league = await this.$store.dispatch("league/CreateAndAdd", {
         name: this.leagueName,
         rankingSystem: this.rankingSystem,
       });
+
+      // Stop the spinner
+      this.isLoading = false;
 
       this.joinCode = league.join_code;
       this.isCreatedView = true;

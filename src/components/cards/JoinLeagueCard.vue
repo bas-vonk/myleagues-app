@@ -1,7 +1,8 @@
 <template>
   <div class="card text-white bg-primary mb-3">
     <div class="card-header">Join League</div>
-    <div class="card-body">
+    <loading-spinner v-if="isLoading"></loading-spinner>
+    <div class="card-body" v-if="!isLoading">
       <div class="container" v-if="isFindLeagueView || isJoinLeagueView">
         <form v-on:submit.prevent="submitForm">
           <div class="form-group">
@@ -25,9 +26,11 @@
           </button>
         </form>
       </div>
-      <div v-if="isJoinedLeagueView">League joined.</div>
-      <div v-if="isAlreadyInLeagueView">You are already in this league.</div>
-      <div v-if="isAlreadyInLeagueView || isJoinedLeagueView">
+      <div v-if="!isLoading && isJoinedLeagueView">League joined.</div>
+      <div v-if="!isLoading && isAlreadyInLeagueView">
+        You are already in this league.
+      </div>
+      <div v-if="(!isLoading && isAlreadyInLeagueView) || isJoinedLeagueView">
         <small id="findJoinAnotherLeague" @click="resetView()">
           Find another league.
         </small>
@@ -38,11 +41,16 @@
 
 <script>
 import { LeagueService } from "@/services/league";
+import LoadingSpinner from "@/components/ui/LoadingSpinner.vue";
 
 export default {
   name: "JoinLeagueCard",
+  components: {
+    LoadingSpinner,
+  },
   data() {
     return {
+      isLoading: false,
       isAlreadyInLeagueView: false,
       isJoinLeagueView: false,
       isJoinedLeagueView: false,
@@ -61,12 +69,15 @@ export default {
 
       try {
         // Start spinner
+        this.isLoading = true;
+
         const responseData = await leagueService.read("", params);
         league = responseData.data.attributes;
       } catch (error) {
         throw error.message;
       } finally {
         // Stop spinner
+        this.isLoading = false;
       }
 
       return league;
@@ -88,9 +99,16 @@ export default {
         }
       } else {
         // Join league action
+
+        // Start spinner
+        this.isLoading = true;
+
         await this.$store.dispatch("user_leagues/JoinLeague", {
           leagueId: this.leagueId,
         });
+
+        // Stop spinner
+        this.isLoading = false;
 
         this.isFindLeagueView = false;
         this.isJoinLeagueView = false;

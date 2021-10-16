@@ -49,24 +49,14 @@ export default {
     RankingCard,
   },
   async beforeRouteUpdate(to) {
-    // Start spinner
-    store.dispatch("setIsLoading", true, { root: true });
-
     await store.dispatch("league_page/GetForIdAndStore", {
       leagueId: to.params.id,
     });
-    // Stop spinner
-    store.dispatch("setIsLoading", false, { root: true });
   },
   async beforeRouteEnter(to) {
-    // Start spinner
-    store.dispatch("setIsLoading", true, { root: true });
-
     await store.dispatch("league_page/GetForIdAndStore", {
       leagueId: to.params.id,
     });
-    // Stop spinner
-    store.dispatch("setIsLoading", false, { root: true });
   },
   computed: {
     username() {

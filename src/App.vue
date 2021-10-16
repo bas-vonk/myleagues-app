@@ -34,9 +34,6 @@ export default {
   },
   async mounted() {
     if (store.getters["user/accessToken"]) {
-      // Start spinner
-      this.$store.dispatch("setIsLoading", true, { root: true });
-
       // Parse the JWT token and store info in the application state
       store.dispatch("user/StoreAccessTokenData", {
         accessToken: store.getters["user/accessToken"],
@@ -44,9 +41,6 @@ export default {
 
       // Get the leagues for a user
       await store.dispatch("user_leagues/GetLeaguesForUserAndAdd");
-
-      // Start spinner
-      this.$store.dispatch("setIsLoading", false, { root: true });
     }
   },
   methods: {

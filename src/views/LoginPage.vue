@@ -79,9 +79,6 @@ export default {
       this.$router.push({ name: "home" });
     },
     async login() {
-      // Start spinner
-      this.$store.dispatch("setIsLoading", true, { root: true });
-
       await this.$store.dispatch("user/Login", {
         emailAddress: this.emailAddress,
         password: this.password,
@@ -90,17 +87,11 @@ export default {
       // Get the leagues for a user and navigate to the home page
       await store.dispatch("user_leagues/GetLeaguesForUserAndAdd");
       this.navigateToHome();
-
-      // Stop spinner
-      this.$store.dispatch("setIsLoading", false, { root: true });
     },
     async register() {
       if (!this.passwordsMatch) {
         throw "Passwords don't match.";
       }
-
-      // Start spinner
-      this.$store.dispatch("setIsLoading", true, { root: true });
 
       // Register the user and go to the home page.
       await this.$store.dispatch("user/Register", {
@@ -109,9 +100,6 @@ export default {
         username: this.username,
       });
       this.navigateToHome();
-
-      // Stop spinner
-      this.$store.dispatch("setIsLoading", false, { root: true });
     },
     async submitForm() {
       try {
