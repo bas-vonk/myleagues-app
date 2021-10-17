@@ -52,9 +52,7 @@ export default {
     try {
       store.dispatch("setIsGlobalLoading", true, { root: true });
 
-      await store.dispatch("league_page/GetForIdAndStore", {
-        leagueId: to.params.id,
-      });
+      await store.dispatch("league_page/GetForIdAndStore", to.params.id);
     } catch (error) {
       store.dispatch("setIsGlobalError", true, { root: true });
       store.dispatch("setGlobalErrorMessage", error.message, { root: true });
@@ -66,9 +64,7 @@ export default {
     try {
       store.dispatch("setIsGlobalLoading", true, { root: true });
 
-      await store.dispatch("league_page/GetForIdAndStore", {
-        leagueId: to.params.id,
-      });
+      await store.dispatch("league_page/GetForIdAndStore", to.params.id);
     } catch (error) {
       store.dispatch("setIsGlobalError", true, { root: true });
       store.dispatch("setGlobalErrorMessage", error.message, { root: true });
