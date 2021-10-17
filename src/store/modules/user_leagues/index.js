@@ -10,7 +10,7 @@ const actions = {
 
     try {
       // Start spinner
-      dispatch("setIsLoading", true, { root: true });
+      dispatch("setIsGlobalLoading", true, { root: true });
 
       // Call the service
       const responseData = await state.userService.get_leagues_for_user();
@@ -22,7 +22,7 @@ const actions = {
       throw error.message;
     } finally {
       // Stop spinner
-      dispatch("setIsLoading", false, { root: true });
+      dispatch("setIsGlobalLoading", false, { root: true });
     }
   },
   async JoinLeague({ commit }, payload) {

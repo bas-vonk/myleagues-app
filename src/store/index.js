@@ -6,35 +6,35 @@ import user_leagues from "./modules/user_leagues";
 
 const store = createStore({
   state: {
-    isLoading: false,
-    isError: false,
-    errorMessage: "",
+    isGlobalLoading: false,
+    isGlobalError: false,
+    globalErrorMessage: "",
   },
   getters: {
-    isLoading: (state) => state.isLoading,
-    isError: (state) => state.isError,
-    errorMessage: (state) => state.errorMessage,
+    isGlobalLoading: (state) => state.isGlobalLoading,
+    isGlobalError: (state) => state.isGlobalError,
+    globalErrorMessage: (state) => state.globalErrorMessage,
   },
   mutations: {
-    setIsLoading(state, isLoading) {
-      state.isLoading = isLoading;
+    setIsGlobalLoading(state, isGlobalLoading) {
+      state.isGlobalLoading = isGlobalLoading;
     },
-    setIsError(state, isError) {
-      state.isError = isError;
+    setIsGlobalError(state, isGlobalError) {
+      state.isGlobalError = isGlobalError;
     },
-    setErrorMessage(state, errorMessage) {
-      state.errorMessage = errorMessage;
+    setGlobalErrorMessage(state, globalErrorMessage) {
+      state.globalErrorMessage = globalErrorMessage;
     },
   },
   actions: {
-    setIsLoading({ commit }, isLoading) {
-      commit("setIsLoading", isLoading);
+    setIsGlobalLoading({ commit }, isGlobalLoading) {
+      commit("setIsGlobalLoading", isGlobalLoading);
     },
-    setIsError({ commit }, isError) {
-      commit("setIsError", isError);
+    setIsGlobalError({ commit }, isGlobalError) {
+      commit("setIsGlobalError", isGlobalError);
     },
-    setErrorMessage({ commit }, errorMessage) {
-      commit("setErrorMessage", errorMessage);
+    setGlobalErrorMessage({ commit }, globalErrorMessage) {
+      commit("setGlobalErrorMessage", globalErrorMessage);
     },
   },
   modules: {

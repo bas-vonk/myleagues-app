@@ -4,13 +4,13 @@
     :leagues="leagues"
     :username="username"
   ></the-header>
-  <loading-spinner v-if="isLoading"></loading-spinner>
+  <loading-spinner v-if="isGlobalLoading"></loading-spinner>
+  <router-view v-else-if="!isGlobalError" />
   <error-message
-    v-if="isError"
-    :errorMessage="errorMessage"
-    @close="resetError()"
+    v-else
+    @close="resetErrorAndGoToLogin()"
+    :errorMessage="globalErrorMessage"
   ></error-message>
-  <router-view v-if="!isLoading && !isError" />
 </template>
 
 <script>
@@ -52,9 +52,13 @@ export default {
     }
   },
   methods: {
-    resetError() {
-      this.$store.dispatch("setIsError", false, { root: true });
-      this.$store.dispatch("setErrorMessage", "", { root: true });
+    resetErrorAndGoToLogin() {
+      this.$store.dispatch("setIsGlobalError", false, { root: true });
+      this.$store.dispatch("setGlobalErrorMessage", "", { root: true });
+
+      this.$store.dispatch("user/Logout");
+
+      this.$router.push({ name: "login" });
     },
     setLocaleFromStore() {
       let locale = this.$store.getters["user/locale"];
@@ -68,9 +72,9 @@ export default {
   },
   computed: {
     ...mapGetters({
-      isLoading: "isLoading",
-      isError: "isError",
-      errorMessage: "errorMessage",
+      isGlobalLoading: "isGlobalLoading",
+      isGlobalError: "isGlobalError",
+      globalErrorMessage: "globalErrorMessage",
       isLoggedIn: "user/isLoggedIn",
       username: "user/username",
       leagues: "user_leagues/leagues",

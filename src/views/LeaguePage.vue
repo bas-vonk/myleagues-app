@@ -50,30 +50,30 @@ export default {
   },
   async beforeRouteEnter(to) {
     try {
-      store.dispatch("setIsLoading", true, { root: true });
+      store.dispatch("setIsGlobalLoading", true, { root: true });
 
       await store.dispatch("league_page/GetForIdAndStore", {
         leagueId: to.params.id,
       });
     } catch (error) {
-      store.dispatch("setIsError", true, { root: true });
-      store.dispatch("setErrorMessage", error.message, { root: true });
+      store.dispatch("setIsGlobalError", true, { root: true });
+      store.dispatch("setGlobalErrorMessage", error.message, { root: true });
     } finally {
-      store.dispatch("setIsLoading", false, { root: true });
+      store.dispatch("setIsGlobalLoading", false, { root: true });
     }
   },
   async beforeRouteUpdate(to) {
     try {
-      store.dispatch("setIsLoading", true, { root: true });
+      store.dispatch("setIsGlobalLoading", true, { root: true });
 
       await store.dispatch("league_page/GetForIdAndStore", {
         leagueId: to.params.id,
       });
     } catch (error) {
-      store.dispatch("setIsError", true, { root: true });
-      store.dispatch("setErrorMessage", error.message, { root: true });
+      store.dispatch("setIsGlobalError", true, { root: true });
+      store.dispatch("setGlobalErrorMessage", error.message, { root: true });
     } finally {
-      store.dispatch("setIsLoading", false, { root: true });
+      store.dispatch("setIsGlobalLoading", false, { root: true });
     }
   },
   computed: {

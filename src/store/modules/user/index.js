@@ -31,21 +31,10 @@ const actions = {
       password: payload.password,
     };
 
-    try {
-      // Start spinner
-      dispatch("setIsLoading", true, { root: true });
-
-      // Call the service
-      const responseData = await state.userService.login(params);
-      dispatch("StoreAccessTokenData", {
-        accessToken: responseData.access_token,
-      });
-    } catch (error) {
-      throw error.message;
-    } finally {
-      // Stop spinner
-      dispatch("setIsLoading", false, { root: true });
-    }
+    const responseData = await state.userService.login(params);
+    dispatch("StoreAccessTokenData", {
+      accessToken: responseData.access_token,
+    });
   },
   async Register({ dispatch }, payload) {
     let params = {
@@ -54,21 +43,11 @@ const actions = {
       password: payload.password,
     };
 
-    try {
-      // Start spinner
-      dispatch("setIsLoading", true, { root: true });
-
-      // Call the service
-      const responseData = await state.userService.register(params);
-      dispatch("StoreAccessTokenData", {
-        accessToken: responseData.access_token,
-      });
-    } catch (error) {
-      throw error.message;
-    } finally {
-      // Stop spinner
-      dispatch("setIsLoading", false, { root: true });
-    }
+    // Call the service
+    const responseData = await state.userService.register(params);
+    dispatch("StoreAccessTokenData", {
+      accessToken: responseData.access_token,
+    });
   },
   StoreAccessTokenData({ commit }, payload) {
     let accessToken = payload.accessToken;

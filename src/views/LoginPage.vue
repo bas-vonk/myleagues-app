@@ -79,14 +79,40 @@ export default {
       this.$router.push({ name: "home" });
     },
     async login() {
-      await this.$store.dispatch("user/Login", {
-        emailAddress: this.emailAddress,
-        password: this.password,
-      });
+      try {
+        // Start spinner
+        this.$store.dispatch("setIsGlobalLoading", true, { root: true });
 
-      // Get the leagues for a user and navigate to the home page
-      await store.dispatch("user_leagues/GetLeaguesForUserAndAdd");
-      this.navigateToHome();
+        // Dispatch the login action
+        await this.$store.dispatch("user/Login", {
+          emailAddress: this.emailAddress,
+          password: this.password,
+        });
+      } catch (error) {
+        this.isError = true;
+        this.errorMessage = error.message;
+        return;
+      } finally {
+        this.$store.dispatch("setIsGlobalLoading", false, { root: true });
+      }
+
+      try {
+        // Start spinner
+        this.$store.dispatch("setIsGlobalLoading", true, { root: true });
+
+        // Get the leagues for a user and navigate to the home page
+        await store.dispatch("user_leagues/GetLeaguesForUserAndAdd");
+        this.navigateToHome();
+      } catch (error) {
+        this.store.dispatch("setIsGlobalError", true, { root: true });
+        this.store.dispatch("setGlobalErrorMessage", error.message, {
+          root: true,
+        });
+      } finally {
+        this.$store.dispatch("setIsGlobalLoading", false, { root: true });
+      }
+
+      console.log("end");
     },
     async register() {
       if (!this.passwordsMatch) {
@@ -102,13 +128,10 @@ export default {
       this.navigateToHome();
     },
     async submitForm() {
-      try {
-        this.mode === "login" ? await this.login() : await this.register();
-        this.isError = false;
-        this.errorMessage = null;
-      } catch (e) {
-        this.isError = true;
-        this.errorMessage = e;
+      if (this.mode === "login") {
+        await this.login();
+      } else {
+        await this.register();
       }
     },
   },
