@@ -26,49 +26,35 @@ const actions = {
     dispatch("user_leagues/ResetLeagues", {}, { root: true });
   },
   async Login({ dispatch }, payload) {
+    // Prepare the params for the API call
     let params = {
       email: payload.emailAddress,
       password: payload.password,
     };
 
-    try {
-      // Start spinner
-      dispatch("setIsLoading", true, { root: true });
+    // Call the service
+    const responseData = await state.userService.login(params);
 
-      // Call the service
-      const responseData = await state.userService.login(params);
-      dispatch("StoreAccessTokenData", {
-        accessToken: responseData.access_token,
-      });
-    } catch (error) {
-      throw error.message;
-    } finally {
-      // Stop spinner
-      dispatch("setIsLoading", false, { root: true });
-    }
+    // Store the contents of the JWT token into the application
+    dispatch("StoreAccessTokenData", {
+      accessToken: responseData.access_token,
+    });
   },
   async Register({ dispatch }, payload) {
+    // Prepare the params for the API call
     let params = {
       email: payload.emailAddress,
       username: payload.username,
       password: payload.password,
     };
 
-    try {
-      // Start spinner
-      dispatch("setIsLoading", true, { root: true });
+    // Call the service
+    const responseData = await state.userService.register(params);
 
-      // Call the service
-      const responseData = await state.userService.register(params);
-      dispatch("StoreAccessTokenData", {
-        accessToken: responseData.access_token,
-      });
-    } catch (error) {
-      throw error.message;
-    } finally {
-      // Stop spinner
-      dispatch("setIsLoading", false, { root: true });
-    }
+    // Store the contents of the JWT token into the application
+    dispatch("StoreAccessTokenData", {
+      accessToken: responseData.access_token,
+    });
   },
   StoreAccessTokenData({ commit }, payload) {
     let accessToken = payload.accessToken;

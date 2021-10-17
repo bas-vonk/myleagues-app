@@ -5,39 +5,30 @@ const getters = {
   leagues: (state) => state.leagues,
 };
 const actions = {
-  async GetLeaguesForUserAndAdd({ dispatch, commit }) {
+  async GetLeaguesForUserAndAdd({ commit }) {
+    // Clear out all current leagues
     commit("resetLeagues");
 
-    try {
-      // Start spinner
-      dispatch("setIsLoading", true, { root: true });
+    // Call the service
+    const responseData = await state.userService.get_leagues_for_user();
 
-      // Call the service
-      const responseData = await state.userService.get_leagues_for_user();
-
-      responseData.data.forEach(function (item) {
-        commit("addLeague", item.attributes);
-      });
-    } catch (error) {
-      throw error.message;
-    } finally {
-      // Stop spinner
-      dispatch("setIsLoading", false, { root: true });
-    }
+    // Add all leagues
+    responseData.data.forEach(function (item) {
+      commit("addLeague", item.attributes);
+    });
   },
   async JoinLeague({ commit }, payload) {
+    // Prepare the params for the API call
     let params = { league_id: payload.leagueId };
 
-    try {
-      // Start spinner
-      const responseData = await state.userService.join_league(params);
-      let league = responseData.data.attributes;
-      commit("addLeague", league);
-    } catch (error) {
-      throw error.message;
-    } finally {
-      // Stop spinner
-    }
+    // Call the service and define the response
+    const responseData = await state.userService.join_league(params);
+    let league = responseData.data.attributes;
+
+    commit("addLeague", league);
+  },
+  ResetLeagues({ commit }) {
+    commit("resetLeagues");
   },
 };
 const mutations = {

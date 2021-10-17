@@ -25,35 +25,20 @@ const actions = {
   AddMatch({ commit }, payload) {
     commit("addMatch", payload);
   },
-  async GetForIdAndStore({ dispatch, commit }, payload) {
-    var league;
+  async GetForIdAndStore({ commit }, payload) {
+    // Call the service
+    const responseData = await state.leagueService.read(payload.leagueId);
+    const league = responseData.data.attributes;
 
-    try {
-      // Start spinner (if it's not suppressed)
-      // (It can be supressed for instance when a match is added, and the page needs
-      // to be animated)
-      if (!payload.suppressSpinner) {
-        dispatch("setIsLoading", true, { root: true });
-      }
+    // Store all info in the store
+    commit("setName", league.name);
+    commit("setRankingSystem", league.ranking_system);
+    commit("setLeagueId", league.id);
+    commit("setJoinCode", league.join_code);
+    commit("setMatches", league.matches);
+    commit("setPlayers", league.players);
+    commit("setRanking", league.ranking);
 
-      // Call the service
-      const responseData = await state.leagueService.read(payload.leagueId);
-      league = responseData.data.attributes;
-      commit("setName", league.name);
-      commit("setRankingSystem", league.ranking_system);
-      commit("setLeagueId", league.id);
-      commit("setJoinCode", league.join_code);
-      commit("setMatches", league.matches);
-      commit("setPlayers", league.players);
-      commit("setRanking", league.ranking);
-    } catch (error) {
-      throw error.message;
-    } finally {
-      // Stop spinner
-      if (!payload.suppressSpinner) {
-        dispatch("setIsLoading", false, { root: true });
-      }
-    }
     return league;
   },
 };

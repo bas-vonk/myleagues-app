@@ -4,13 +4,20 @@
     :leagues="leagues"
     :username="username"
   ></the-header>
-  <loading-spinner v-if="isLoading"></loading-spinner>
-  <router-view v-else />
+  <loading-spinner v-if="isGlobalLoading"></loading-spinner>
+  <error-message
+    v-if="isGlobalError"
+    @close="resetErrorAndGoToLogin()"
+    :errorMessage="globalErrorMessage"
+  ></error-message>
+  <router-view v-if="!isGlobalError" />
 </template>
 
 <script>
 import TheHeader from "@/components/ui/TheHeader.vue";
 import LoadingSpinner from "@/components/ui/LoadingSpinner.vue";
+import ErrorMessage from "@/components/ui/ErrorMessage.vue";
+
 import { mapGetters } from "vuex";
 import { store } from "@/store";
 
@@ -19,6 +26,7 @@ export default {
   components: {
     TheHeader,
     LoadingSpinner,
+    ErrorMessage,
   },
   created() {
     // Set the locale
@@ -39,11 +47,32 @@ export default {
         accessToken: store.getters["user/accessToken"],
       });
 
-      // Get the leagues for a user
-      await store.dispatch("user_leagues/GetLeaguesForUserAndAdd");
+      try {
+        // Start spinner
+        this.$store.dispatch("setIsGlobalLoading", true, { root: true });
+
+        // Get the leagues for a user
+        await this.$store.dispatch("user_leagues/GetLeaguesForUserAndAdd");
+      } catch (error) {
+        this.$store.dispatch("setIsGlobalError", true, { root: true });
+        this.$store.dispatch("setGlobalErrorMessage", error.message, {
+          root: true,
+        });
+      } finally {
+        // Stop spinner
+        this.$store.dispatch("setIsGlobalLoading", false, { root: true });
+      }
     }
   },
   methods: {
+    resetErrorAndGoToLogin() {
+      this.$store.dispatch("setIsGlobalError", false, { root: true });
+      this.$store.dispatch("setGlobalErrorMessage", "", { root: true });
+
+      this.$store.dispatch("user/Logout");
+
+      this.$router.push({ name: "login" });
+    },
     setLocaleFromStore() {
       let locale = this.$store.getters["user/locale"];
       this.$root.$i18n.locale = locale;
@@ -56,8 +85,10 @@ export default {
   },
   computed: {
     ...mapGetters({
+      isGlobalLoading: "isGlobalLoading",
+      isGlobalError: "isGlobalError",
+      globalErrorMessage: "globalErrorMessage",
       isLoggedIn: "user/isLoggedIn",
-      isLoading: "isLoading",
       username: "user/username",
       leagues: "user_leagues/leagues",
     }),

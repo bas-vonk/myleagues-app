@@ -1,5 +1,8 @@
 <template>
   <loading-spinner v-if="isLoading"></loading-spinner>
+  <div class="alert alert-warning" v-if="isErrorView">
+    {{ errorMessage }}
+  </div>
   <canvas id="ranking-chart"></canvas>
 </template>
 
@@ -16,6 +19,8 @@ export default {
   data() {
     return {
       isLoading: false,
+      isErrorView: false,
+      errorMessage: "",
       chart: undefined,
       chartData: {
         type: "line",
@@ -50,23 +55,27 @@ export default {
     },
     async getRankingHistory(leagueId) {
       let leagueService = new LeagueService();
-      var rankingHistory;
 
-      try {
-        this.isLoading = true;
-        const responseData = await leagueService.get_ranking_history(leagueId);
-        rankingHistory = responseData.data.attributes.ranking_history;
-      } catch (error) {
-        throw error.message;
-      } finally {
-        this.isLoading = false;
-      }
+      // Call the service
+      const responseData = await leagueService.get_ranking_history(leagueId);
 
-      return rankingHistory;
+      // Return the required data
+      return responseData.data.attributes.ranking_history;
     },
   },
   async mounted() {
-    let rankingHistory = await this.getRankingHistory(this.leagueId);
+    var rankingHistory;
+
+    try {
+      this.isLoading = true;
+      rankingHistory = await this.getRankingHistory(this.leagueId);
+    } catch (error) {
+      this.isErrorView = true;
+      this.errorMessage = error.message;
+      return;
+    } finally {
+      this.isLoading = false;
+    }
 
     this.chartData.data.labels = rankingHistory.labels;
     this.chartData.data.datasets = rankingHistory.datasets;

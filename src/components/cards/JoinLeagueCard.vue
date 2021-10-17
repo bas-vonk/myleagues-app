@@ -2,8 +2,11 @@
   <div class="card text-white bg-primary mb-3">
     <div class="card-header">Join League</div>
     <loading-spinner v-if="isLoading"></loading-spinner>
-    <div class="card-body" v-if="!isLoading">
-      <div class="container" v-if="isFindLeagueView || isJoinLeagueView">
+    <div v-else class="card-body">
+      <div
+        class="container"
+        v-if="(isFindLeagueView || isJoinLeagueView) && !isErrorView"
+      >
         <form v-on:submit.prevent="submitForm">
           <div class="form-group">
             <input
@@ -26,11 +29,11 @@
           </button>
         </form>
       </div>
-      <div v-if="!isLoading && isJoinedLeagueView">League joined.</div>
-      <div v-if="!isLoading && isAlreadyInLeagueView">
-        You are already in this league.
+      <div class="alert alert-warning" v-if="isErrorView">
+        {{ errorMessage }}
       </div>
-      <div v-if="(!isLoading && isAlreadyInLeagueView) || isJoinedLeagueView">
+      <div v-if="isJoinedLeagueView">League joined.</div>
+      <div v-if="isAlreadyInLeagueView || isJoinedLeagueView || isErrorView">
         <small id="findJoinAnotherLeague" @click="resetView()">
           Find another league.
         </small>
@@ -52,6 +55,7 @@ export default {
     return {
       isLoading: false,
       isAlreadyInLeagueView: false,
+      isErrorView: false,
       isJoinLeagueView: false,
       isJoinedLeagueView: false,
       isFindLeagueView: true,
@@ -67,55 +71,56 @@ export default {
 
       let params = { "filter[join_code]": joinCode };
 
+      const responseData = await leagueService.read("", params);
+      league = responseData.data.attributes;
+
+      return league;
+    },
+    async processFindLeagueAction() {
+      let league = await this.getLeagueForJoinCode(this.joinCode);
+
+      this.leagueId = league.id;
+      this.leagueName = league.name;
+
+      this.isFindLeagueView = false;
+
+      if (this.isAlreadyInLeague) {
+        this.isErrorView = true;
+        this.errorMessage = "You are already in this league.";
+        this.joinCode = undefined;
+      } else {
+        this.isJoinLeagueView = true;
+      }
+    },
+    async processJoinLeagueAction() {
+      await this.$store.dispatch("user_leagues/JoinLeague", {
+        leagueId: this.leagueId,
+      });
+
+      this.isFindLeagueView = false;
+      this.isJoinLeagueView = false;
+      this.isJoinedLeagueView = true;
+    },
+    async submitForm() {
       try {
         // Start spinner
         this.isLoading = true;
 
-        const responseData = await leagueService.read("", params);
-        league = responseData.data.attributes;
+        if (this.isFindLeagueView) {
+          await this.processFindLeagueAction();
+        } else {
+          await this.processJoinLeagueAction();
+        }
       } catch (error) {
-        throw error.message;
+        this.isErrorView = true;
+        this.errorMessage = error.message;
       } finally {
         // Stop spinner
         this.isLoading = false;
       }
-
-      return league;
-    },
-    async submitForm() {
-      if (this.isFindLeagueView) {
-        let league = await this.getLeagueForJoinCode(this.joinCode);
-
-        this.leagueId = league.id;
-        this.leagueName = league.name;
-
-        this.isFindLeagueView = false;
-
-        if (this.isAlreadyInLeague) {
-          this.isAlreadyInLeagueView = true;
-          this.joinCode = undefined;
-        } else {
-          this.isJoinLeagueView = true;
-        }
-      } else {
-        // Join league action
-
-        // Start spinner
-        this.isLoading = true;
-
-        await this.$store.dispatch("user_leagues/JoinLeague", {
-          leagueId: this.leagueId,
-        });
-
-        // Stop spinner
-        this.isLoading = false;
-
-        this.isFindLeagueView = false;
-        this.isJoinLeagueView = false;
-        this.isJoinedLeagueView = true;
-      }
     },
     resetView() {
+      this.isErrorView = false;
       this.isFindLeagueView = true;
       this.isAlreadyInLeagueView = false;
       this.isJoinLeagueView = false;
@@ -146,6 +151,9 @@ export default {
 </script>
 
 <style lang="css" scoped>
+.alert {
+  font-size: 0.8rem;
+}
 button {
   background-color: #f79e02;
   border-style: none;

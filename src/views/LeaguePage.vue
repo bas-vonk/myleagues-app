@@ -48,15 +48,33 @@ export default {
     AllMatchesCard,
     RankingCard,
   },
-  async beforeRouteUpdate(to) {
-    await store.dispatch("league_page/GetForIdAndStore", {
-      leagueId: to.params.id,
-    });
-  },
   async beforeRouteEnter(to) {
-    await store.dispatch("league_page/GetForIdAndStore", {
-      leagueId: to.params.id,
-    });
+    try {
+      store.dispatch("setIsGlobalLoading", true, { root: true });
+
+      await store.dispatch("league_page/GetForIdAndStore", {
+        leagueId: to.params.id,
+      });
+    } catch (error) {
+      store.dispatch("setIsGlobalError", true, { root: true });
+      store.dispatch("setGlobalErrorMessage", error.message, { root: true });
+    } finally {
+      store.dispatch("setIsGlobalLoading", false, { root: true });
+    }
+  },
+  async beforeRouteUpdate(to) {
+    try {
+      store.dispatch("setIsGlobalLoading", true, { root: true });
+
+      await store.dispatch("league_page/GetForIdAndStore", {
+        leagueId: to.params.id,
+      });
+    } catch (error) {
+      store.dispatch("setIsGlobalError", true, { root: true });
+      store.dispatch("setGlobalErrorMessage", error.message, { root: true });
+    } finally {
+      store.dispatch("setIsGlobalLoading", false, { root: true });
+    }
   },
   computed: {
     username() {
@@ -101,7 +119,7 @@ export default {
   padding-left: 5%;
   padding-right: 5%;
   overflow: scroll;
-  max-height: calc(var(--vh, 1vh) * 85);
+  max-height: calc(var(--vh, 1vh) * 90);
   width: 100vw;
 }
 .extra-padding {

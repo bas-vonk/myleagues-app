@@ -6,19 +6,35 @@ import user_leagues from "./modules/user_leagues";
 
 const store = createStore({
   state: {
-    isLoading: false,
+    isGlobalLoading: false,
+    isGlobalError: false,
+    globalErrorMessage: "",
   },
   getters: {
-    isLoading: (state) => state.isLoading,
+    isGlobalLoading: (state) => state.isGlobalLoading,
+    isGlobalError: (state) => state.isGlobalError,
+    globalErrorMessage: (state) => state.globalErrorMessage,
   },
   mutations: {
-    setIsLoading(state, isLoading) {
-      state.isLoading = isLoading;
+    setIsGlobalLoading(state, isGlobalLoading) {
+      state.isGlobalLoading = isGlobalLoading;
+    },
+    setIsGlobalError(state, isGlobalError) {
+      state.isGlobalError = isGlobalError;
+    },
+    setGlobalErrorMessage(state, globalErrorMessage) {
+      state.globalErrorMessage = globalErrorMessage;
     },
   },
   actions: {
-    setIsLoading({ commit }, isLoading) {
-      commit("setIsLoading", isLoading);
+    setIsGlobalLoading({ commit }, isGlobalLoading) {
+      commit("setIsGlobalLoading", isGlobalLoading);
+    },
+    setIsGlobalError({ commit }, isGlobalError) {
+      commit("setIsGlobalError", isGlobalError);
+    },
+    setGlobalErrorMessage({ commit }, globalErrorMessage) {
+      commit("setGlobalErrorMessage", globalErrorMessage);
     },
   },
   modules: {
