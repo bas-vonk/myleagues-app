@@ -26,17 +26,22 @@ const actions = {
     dispatch("user_leagues/ResetLeagues", {}, { root: true });
   },
   async Login({ dispatch }, payload) {
+    // Prepare the params for the API call
     let params = {
       email: payload.emailAddress,
       password: payload.password,
     };
 
+    // Call the service
     const responseData = await state.userService.login(params);
+
+    // Store the contents of the JWT token into the application
     dispatch("StoreAccessTokenData", {
       accessToken: responseData.access_token,
     });
   },
   async Register({ dispatch }, payload) {
+    // Prepare the params for the API call
     let params = {
       email: payload.emailAddress,
       username: payload.username,
@@ -45,6 +50,8 @@ const actions = {
 
     // Call the service
     const responseData = await state.userService.register(params);
+
+    // Store the contents of the JWT token into the application
     dispatch("StoreAccessTokenData", {
       accessToken: responseData.access_token,
     });

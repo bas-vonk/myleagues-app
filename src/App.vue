@@ -5,12 +5,12 @@
     :username="username"
   ></the-header>
   <loading-spinner v-if="isGlobalLoading"></loading-spinner>
-  <router-view v-else-if="!isGlobalError" />
   <error-message
-    v-else
+    v-if="isGlobalError"
     @close="resetErrorAndGoToLogin()"
     :errorMessage="globalErrorMessage"
   ></error-message>
+  <router-view v-if="!isGlobalError" />
 </template>
 
 <script>
@@ -47,8 +47,21 @@ export default {
         accessToken: store.getters["user/accessToken"],
       });
 
-      // Get the leagues for a user
-      await store.dispatch("user_leagues/GetLeaguesForUserAndAdd");
+      try {
+        // Start spinner
+        this.$store.dispatch("setIsGlobalLoading", true, { root: true });
+
+        // Get the leagues for a user
+        await this.$store.dispatch("user_leagues/GetLeaguesForUserAndAdd");
+      } catch (error) {
+        this.$store.dispatch("setIsGlobalError", true, { root: true });
+        this.$store.dispatch("setGlobalErrorMessage", error.message, {
+          root: true,
+        });
+      } finally {
+        // Stop spinner
+        this.$store.dispatch("setIsGlobalLoading", false, { root: true });
+      }
     }
   },
   methods: {

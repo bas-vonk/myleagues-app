@@ -29,6 +29,8 @@ const actions = {
     // Call the service
     const responseData = await state.leagueService.read(payload.leagueId);
     const league = responseData.data.attributes;
+
+    // Store all info in the store
     commit("setName", league.name);
     commit("setRankingSystem", league.ranking_system);
     commit("setLeagueId", league.id);
@@ -36,6 +38,7 @@ const actions = {
     commit("setMatches", league.matches);
     commit("setPlayers", league.players);
     commit("setRanking", league.ranking);
+
     return league;
   },
 };

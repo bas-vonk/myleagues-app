@@ -4,8 +4,8 @@
       {{ $t("components.cards.createLeagueCard.title") }}
     </div>
     <loading-spinner v-if="isLoading"></loading-spinner>
-    <div class="card-body">
-      <div class="container" v-if="!isLoading && !isCreatedView">
+    <div v-else class="card-body">
+      <div class="container" v-if="!isCreatedView && !isErrorView">
         <form v-on:submit.prevent="submitForm">
           <div class="form-group">
             <input
@@ -35,9 +35,12 @@
           <button type="submit" class="btn btn-primary">Create</button>
         </form>
       </div>
-      <div v-if="!isLoading && isCreatedView">
-        <div>League created. Join Code: {{ joinCode }}</div>
-        <small id="modeCreateAnotherLeague" @click="resetIsCreatedView()"
+      <div class="alert alert-warning" v-if="isErrorView">
+        {{ errorMessage }}
+      </div>
+      <div v-if="isCreatedView">League created. Join Code: {{ joinCode }}</div>
+      <div v-if="isCreatedView || isErrorView">
+        <small id="modeCreateAnotherLeague" @click="resetView()"
           >Create another league.</small
         >
       </div>
@@ -64,6 +67,8 @@ export default {
   data() {
     return {
       isLoading: false,
+      isErrorView: false,
+      errorMessage: "",
       showModal: false,
       isCreatedView: false,
       leagueId: undefined,
@@ -74,22 +79,29 @@ export default {
   },
   methods: {
     async submitForm() {
-      // Start spinner
-      this.isLoading = true;
+      try {
+        // Start spinner
+        this.isLoading = true;
 
-      // Dispatch the action to the store
-      let league = await this.$store.dispatch("league/CreateAndAdd", {
-        name: this.leagueName,
-        rankingSystem: this.rankingSystem,
-      });
+        // Dispatch the action to the store
+        let league = await this.$store.dispatch("league/CreateAndAdd", {
+          name: this.leagueName,
+          rankingSystem: this.rankingSystem,
+        });
 
-      // Stop the spinner
-      this.isLoading = false;
-
-      this.joinCode = league.join_code;
-      this.isCreatedView = true;
+        // Prepare for the 'created' view
+        this.joinCode = league.join_code;
+        this.isCreatedView = true;
+      } catch (error) {
+        this.isErrorView = true;
+        this.errorMessage = error.message;
+      } finally {
+        this.isLoading = false;
+      }
     },
-    resetIsCreatedView() {
+    resetView() {
+      this.isErrorView = false;
+      this.errorMessage = "";
       this.isCreatedView = false;
       this.leagueName = "";
       this.rankingSystem = "";
@@ -106,6 +118,9 @@ export default {
 </script>
 
 <style lang="css" scoped>
+.alert {
+  font-size: 0.8rem;
+}
 #infoIcon {
   top: 56.5%;
   right: 4.25%;
