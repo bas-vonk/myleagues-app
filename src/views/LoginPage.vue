@@ -5,6 +5,7 @@
       :isError="isError"
       :errorMessage="errorMessage"
       @submit="submitForm"
+      @toggleMode="resetView"
     ></login-register-form>
   </div>
 </template>
@@ -34,6 +35,9 @@ export default {
   methods: {
     navigateToHome() {
       this.$router.push({ name: "home" });
+    },
+    resetView() {
+      (this.isError = false), (this.errorMessage = false);
     },
     async login(formData) {
       try {
@@ -71,7 +75,9 @@ export default {
     },
     async register(formData) {
       if (!this.passwordsMatch(formData)) {
-        throw "Passwords don't match.";
+        this.isError = true;
+        this.errorMessage = "Passwords don't match.";
+        return;
       }
 
       try {

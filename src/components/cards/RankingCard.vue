@@ -2,9 +2,11 @@
   <div class="card text-white bg-primary mb-3">
     <div class="card-header">
       <div class="row">
-        <div class="header-text" id="rankingSystem">{{ rankingSystem }}</div>
-        <div class="header-text">Ranking</div>
-        <div class="header-text">
+        <div class="col header-text" id="rankingSystem">
+          {{ rankingSystem }}
+        </div>
+        <div class="col header-text">Ranking</div>
+        <div class="col header-text">
           <button
             @click="toggleTableChart"
             type="submit"

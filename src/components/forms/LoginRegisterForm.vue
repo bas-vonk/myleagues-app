@@ -47,7 +47,7 @@
 <script>
 export default {
   props: ["isError", "errorMessage"],
-  emits: ["submit"],
+  emits: ["submit", "toggleMode"],
   data() {
     return {
       mode: "login",
@@ -68,6 +68,7 @@ export default {
       });
     },
     toggleMode() {
+      this.$emit("toggleMode");
       this.mode = this.mode !== "login" ? "login" : "register";
     },
   },
