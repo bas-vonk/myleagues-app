@@ -10,36 +10,22 @@
       </div>
     </div>
     <div class="card-body">
-      <table class="table table-borderless table-sm">
-        <thead>
-          <tr>
-            <th scope="col">Position</th>
-            <th scope="col">Name</th>
-            <th scope="col">Points</th>
-            <th scope="col">Saldo</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="row in league.ranking"
-            :key="row.position"
-            :class="{ 'table-active': row.username == username }"
-          >
-            <th>{{ row.position }}</th>
-            <td>{{ row.username }}</td>
-            <td>{{ row.pts_primary }}</td>
-            <td>{{ row.pts_secondary }}</td>
-          </tr>
-        </tbody>
-      </table>
+      <ranking-table
+        :username="username"
+        :ranking="league.ranking"
+      ></ranking-table>
     </div>
   </div>
 </template>
 
 <script>
+import RankingTable from "@/components/tables/RankingTable";
+
 export default {
-  name: "SummaryLeagueCard",
   props: ["league"],
+  components: {
+    RankingTable,
+  },
   data() {
     return {
       isActive: true,
