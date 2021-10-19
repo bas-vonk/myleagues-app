@@ -2,9 +2,11 @@
   <div class="card text-white bg-primary mb-3">
     <div class="card-header">
       <div class="row">
-        <div class="header-text" id="rankingSystem">{{ rankingSystem }}</div>
-        <div class="header-text">Ranking</div>
-        <div class="header-text">
+        <div class="col header-text" id="rankingSystem">
+          {{ rankingSystem }}
+        </div>
+        <div class="col header-text">Ranking</div>
+        <div class="col header-text">
           <button
             @click="toggleTableChart"
             type="submit"
@@ -31,6 +33,11 @@ import RankingTable from "@/components/tables/RankingTable";
 import RankingChart from "@/components/charts/RankingChart";
 
 export default {
+  props: ["leagueId", "ranking", "username", "joinCode", "rankingSystem"],
+  components: {
+    RankingTable,
+    RankingChart,
+  },
   data() {
     return {
       mode: "table",
@@ -53,11 +60,6 @@ export default {
       return this.mode === "chart" ? "Table" : "Chart";
     },
   },
-  components: {
-    RankingTable,
-    RankingChart,
-  },
-  props: ["leagueId", "ranking", "username", "joinCode", "rankingSystem"],
 };
 </script>
 

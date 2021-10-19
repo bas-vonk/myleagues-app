@@ -11,7 +11,7 @@
       <div class="borders col-md-5">
         <div class="row">
           <div class="borders col-md-12 extra-padding">
-            <submit-result-card-singles :players="players" :leagueId="id" />
+            <submit-result-card :players="players" :leagueId="id" />
           </div>
         </div>
         <div class="row">
@@ -36,7 +36,7 @@
 <script>
 import { store } from "@/store";
 
-import SubmitResultCardSingles from "@/components/cards/SubmitResultCardSingles.vue";
+import SubmitResultCard from "@/components/cards/SubmitResultCard.vue";
 import AllMatchesCard from "@/components/cards/AllMatchesCard.vue";
 import RankingCard from "@/components/cards/RankingCard.vue";
 
@@ -44,7 +44,7 @@ export default {
   name: "LeaguePage",
   props: ["id"],
   components: {
-    SubmitResultCardSingles,
+    SubmitResultCard,
     AllMatchesCard,
     RankingCard,
   },
@@ -52,9 +52,7 @@ export default {
     try {
       store.dispatch("setIsGlobalLoading", true, { root: true });
 
-      await store.dispatch("league_page/GetForIdAndStore", {
-        leagueId: to.params.id,
-      });
+      await store.dispatch("league_page/GetForIdAndStore", to.params.id);
     } catch (error) {
       store.dispatch("setIsGlobalError", true, { root: true });
       store.dispatch("setGlobalErrorMessage", error.message, { root: true });
@@ -66,9 +64,7 @@ export default {
     try {
       store.dispatch("setIsGlobalLoading", true, { root: true });
 
-      await store.dispatch("league_page/GetForIdAndStore", {
-        leagueId: to.params.id,
-      });
+      await store.dispatch("league_page/GetForIdAndStore", to.params.id);
     } catch (error) {
       store.dispatch("setIsGlobalError", true, { root: true });
       store.dispatch("setGlobalErrorMessage", error.message, { root: true });

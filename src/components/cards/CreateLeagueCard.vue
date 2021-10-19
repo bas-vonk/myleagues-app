@@ -3,40 +3,15 @@
     <div class="card-header">
       {{ $t("components.cards.createLeagueCard.title") }}
     </div>
-    <loading-spinner v-if="isLoading"></loading-spinner>
-    <div v-else class="card-body">
+    <div class="card-body">
+      <loading-spinner v-if="isLoading"></loading-spinner>
+      <error-message
+        v-if="isErrorView"
+        :errorMessage="errorMessage"
+        @close="resetView()"
+      ></error-message>
       <div class="container" v-if="!isCreatedView && !isErrorView">
-        <form v-on:submit.prevent="submitForm">
-          <div class="form-group">
-            <input
-              type="text"
-              class="form-control"
-              :placeholder="
-                $t('components.cards.createLeagueCard.leagueNamePlaceholder')
-              "
-              v-model="leagueName"
-            />
-          </div>
-          <div class="form-group">
-            <select class="form-control" v-model="rankingSystem">
-              <option disabled selected value="">
-                {{
-                  $t("components.cards.createLeagueCard.selectRankingSystem")
-                }}
-              </option>
-              <option value="regular">Regular</option>
-              <option value="perron_frobenius">Perron-Frobenius</option>
-            </select>
-            <info-circle
-              id="infoIcon"
-              @click="showInformationModal"
-            ></info-circle>
-          </div>
-          <button type="submit" class="btn btn-primary">Create</button>
-        </form>
-      </div>
-      <div class="alert alert-warning" v-if="isErrorView">
-        {{ errorMessage }}
+        <create-league-form @submit="submitForm" />
       </div>
       <div v-if="isCreatedView">League created. Join Code: {{ joinCode }}</div>
       <div v-if="isCreatedView || isErrorView">
@@ -46,47 +21,46 @@
       </div>
     </div>
   </div>
-  <information-modal
-    :showModal="showModal"
-    @closingClick="closeInformationModal"
-  ></information-modal>
 </template>
 
 <script>
-import InfoCircle from "@/components/icons/InfoCircle.vue";
-import InformationModal from "@/components/modals/InformationModal.vue";
 import LoadingSpinner from "@/components/ui/LoadingSpinner.vue";
+import CreateLeagueForm from "@/components/forms/CreateLeagueForm.vue";
+import ErrorMessage from "@/components/ui/ErrorMessage.vue";
 
 export default {
   name: "CreateLeagueCard",
   components: {
-    InfoCircle: InfoCircle,
-    InformationModal: InformationModal,
-    LoadingSpinner: LoadingSpinner,
+    LoadingSpinner,
+    CreateLeagueForm,
+    ErrorMessage,
   },
   data() {
     return {
       isLoading: false,
       isErrorView: false,
       errorMessage: "",
-      showModal: false,
       isCreatedView: false,
       leagueId: undefined,
-      leagueName: "",
-      rankingSystem: "",
       joinCode: undefined,
     };
   },
   methods: {
-    async submitForm() {
+    async submitForm(formData) {
+      if (!formData.leagueName || !formData.rankingSystem) {
+        this.isError = true;
+        this.errorMessage = "Fill in the form.";
+        return;
+      }
+
       try {
         // Start spinner
         this.isLoading = true;
 
         // Dispatch the action to the store
         let league = await this.$store.dispatch("league/CreateAndAdd", {
-          name: this.leagueName,
-          rankingSystem: this.rankingSystem,
+          name: formData.leagueName,
+          rankingSystem: formData.rankingSystem,
         });
 
         // Prepare for the 'created' view
@@ -103,41 +77,13 @@ export default {
       this.isErrorView = false;
       this.errorMessage = "";
       this.isCreatedView = false;
-      this.leagueName = "";
-      this.rankingSystem = "";
       this.joinCode = "";
-    },
-    showInformationModal() {
-      this.showModal = true;
-    },
-    closeInformationModal() {
-      this.showModal = false;
     },
   },
 };
 </script>
 
 <style lang="css" scoped>
-.alert {
-  font-size: 0.8rem;
-}
-#infoIcon {
-  top: 56.5%;
-  right: 4.25%;
-  position: absolute;
-  height: 1rem;
-  width: 1rem;
-}
-button {
-  background-color: #f79e02;
-  border-style: none;
-}
-button,
-input,
-select {
-  margin: 0.1rem auto;
-  width: 95%;
-}
 .card-header {
   height: 4rem;
   text-align: center;

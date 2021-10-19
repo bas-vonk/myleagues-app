@@ -25,9 +25,9 @@ const actions = {
   AddMatch({ commit }, payload) {
     commit("addMatch", payload);
   },
-  async GetForIdAndStore({ commit }, payload) {
+  async GetForIdAndStore({ commit }, leagueId) {
     // Call the service
-    const responseData = await state.leagueService.read(payload.leagueId);
+    const responseData = await state.leagueService.read(leagueId);
     const league = responseData.data.attributes;
 
     // Store all info in the store
