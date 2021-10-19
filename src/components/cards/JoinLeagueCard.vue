@@ -1,39 +1,24 @@
 <template>
   <div class="card text-white bg-primary mb-3">
     <div class="card-header">Join League</div>
-    <loading-spinner v-if="isLoading"></loading-spinner>
-    <div v-else class="card-body">
-      <div
-        class="container"
-        v-if="(isFindLeagueView || isJoinLeagueView) && !isErrorView"
-      >
-        <form v-on:submit.prevent="submitForm">
-          <div class="form-group">
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Join code"
-              v-model="joinCode"
-            />
-          </div>
-          <div class="form-group" v-if="isJoinLeagueView && leagueName">
-            <input
-              type="text"
-              class="form-control"
-              v-bind:placeholder="leagueName"
-              disabled
-            />
-          </div>
-          <button type="submit" class="btn btn-primary">
-            {{ submitButtonText }}
-          </button>
-        </form>
-      </div>
-      <div class="alert alert-warning" v-if="isErrorView">
-        {{ errorMessage }}
+    <div class="card-body">
+      <loading-spinner v-if="isLoading"></loading-spinner>
+      <error-message
+        v-if="isErrorView"
+        :errorMessage="errorMessage"
+        @close="resetView()"
+      ></error-message>
+      <div class="container" v-if="!isJoinedLeagueView && !isErrorView">
+        <join-league-form
+          :isJoinLeagueView="isJoinLeagueView"
+          :isFindLeagueView="isFindLeagueView"
+          :leagueName="leagueName"
+          :leagueId="leagueId"
+          @submit="submitForm"
+        />
       </div>
       <div v-if="isJoinedLeagueView">League joined.</div>
-      <div v-if="isAlreadyInLeagueView || isJoinedLeagueView || isErrorView">
+      <div v-if="(isAlreadyInLeagueView || isJoinedLeagueView) && !isErrorView">
         <small id="findJoinAnotherLeague" @click="resetView()">
           Find another league.
         </small>
@@ -45,71 +30,39 @@
 <script>
 import { LeagueService } from "@/services/league";
 import LoadingSpinner from "@/components/ui/LoadingSpinner.vue";
+import ErrorMessage from "@/components/ui/ErrorMessage.vue";
+import JoinLeagueForm from "@/components/forms/JoinLeagueForm.vue";
 
 export default {
   name: "JoinLeagueCard",
   components: {
     LoadingSpinner,
+    JoinLeagueForm,
+    ErrorMessage,
   },
   data() {
     return {
       isLoading: false,
-      isAlreadyInLeagueView: false,
-      isErrorView: false,
-      isJoinLeagueView: false,
-      isJoinedLeagueView: false,
       isFindLeagueView: true,
-      joinCode: undefined,
+      isJoinLeagueView: false,
+      isErrorView: false,
+      isJoinedLeagueView: false,
+      isAlreadyInLeagueView: false,
+      errorMessage: "",
       leagueId: undefined,
       leagueName: undefined,
     };
   },
   methods: {
-    async getLeagueForJoinCode(joinCode) {
-      let leagueService = new LeagueService();
-      var league;
-
-      let params = { "filter[join_code]": joinCode };
-
-      const responseData = await leagueService.read("", params);
-      league = responseData.data.attributes;
-
-      return league;
-    },
-    async processFindLeagueAction() {
-      let league = await this.getLeagueForJoinCode(this.joinCode);
-
-      this.leagueId = league.id;
-      this.leagueName = league.name;
-
-      this.isFindLeagueView = false;
-
-      if (this.isAlreadyInLeague) {
-        this.isErrorView = true;
-        this.errorMessage = "You are already in this league.";
-        this.joinCode = undefined;
-      } else {
-        this.isJoinLeagueView = true;
-      }
-    },
-    async processJoinLeagueAction() {
-      await this.$store.dispatch("user_leagues/JoinLeague", {
-        leagueId: this.leagueId,
-      });
-
-      this.isFindLeagueView = false;
-      this.isJoinLeagueView = false;
-      this.isJoinedLeagueView = true;
-    },
-    async submitForm() {
+    async submitForm(formData) {
       try {
         // Start spinner
         this.isLoading = true;
 
-        if (this.isFindLeagueView) {
-          await this.processFindLeagueAction();
+        if (formData.isFindLeagueView) {
+          await this.processFindLeagueAction(formData);
         } else {
-          await this.processJoinLeagueAction();
+          await this.processJoinLeagueAction(formData);
         }
       } catch (error) {
         this.isErrorView = true;
@@ -119,31 +72,55 @@ export default {
         this.isLoading = false;
       }
     },
+    async processFindLeagueAction(formData) {
+      let league = await this.getLeagueForJoinCode(formData.joinCode);
+
+      this.leagueId = league.id;
+      this.leagueName = league.name;
+
+      this.isFindLeagueView = false;
+
+      if (this.isAlreadyInLeague(formData)) {
+        this.isErrorView = true;
+        this.errorMessage = "You are already in this league.";
+        this.joinCode = undefined;
+      } else {
+        this.isJoinLeagueView = true;
+      }
+    },
+    async processJoinLeagueAction(formData) {
+      await this.$store.dispatch("user_leagues/JoinLeague", {
+        leagueId: formData.leagueId,
+      });
+
+      this.isFindLeagueView = false;
+      this.isJoinLeagueView = false;
+      this.isJoinedLeagueView = true;
+    },
+    async getLeagueForJoinCode(joinCode) {
+      let leagueService = new LeagueService();
+
+      let params = { "filter[join_code]": joinCode };
+
+      const responseData = await leagueService.read("", params);
+      return responseData.data.attributes;
+    },
     resetView() {
       this.isErrorView = false;
       this.isFindLeagueView = true;
-      this.isAlreadyInLeagueView = false;
       this.isJoinLeagueView = false;
+      this.isAlreadyInLeagueView = false;
       this.isJoinedLeagueView = false;
-      this.isJoinCode = undefined;
       this.leagueId = undefined;
       this.leagueName = undefined;
+      this.errorMessage = "";
     },
-  },
-  computed: {
-    submitButtonText() {
-      if (this.isFindLeagueView) {
-        return "Find League";
-      } else {
-        return "Join League";
-      }
-    },
-    isAlreadyInLeague() {
+    isAlreadyInLeague(formData) {
       // Check if user is  already in league
       let currentLeagues = this.$store.getters["user_leagues/leagues"];
 
       return currentLeagues.find(
-        (currentLeague) => currentLeague["join_code"] === this.joinCode
+        (currentLeague) => currentLeague["join_code"] === formData.joinCode
       );
     },
   },
@@ -151,19 +128,6 @@ export default {
 </script>
 
 <style lang="css" scoped>
-.alert {
-  font-size: 0.8rem;
-}
-button {
-  background-color: #f79e02;
-  border-style: none;
-}
-button,
-input,
-select {
-  margin: 0.1rem auto;
-  width: 95%;
-}
 .card-header {
   height: 4rem;
   text-align: center;

@@ -33,6 +33,11 @@ import RankingTable from "@/components/tables/RankingTable";
 import RankingChart from "@/components/charts/RankingChart";
 
 export default {
+  props: ["leagueId", "ranking", "username", "joinCode", "rankingSystem"],
+  components: {
+    RankingTable,
+    RankingChart,
+  },
   data() {
     return {
       mode: "table",
@@ -55,11 +60,6 @@ export default {
       return this.mode === "chart" ? "Table" : "Chart";
     },
   },
-  components: {
-    RankingTable,
-    RankingChart,
-  },
-  props: ["leagueId", "ranking", "username", "joinCode", "rankingSystem"],
 };
 </script>
 

@@ -12,7 +12,7 @@
         class="container score"
         v-if="!isLoading && !isAddedView && !isErrorView"
       >
-        <match-form :players="players" @submit="submitForm"></match-form>
+        <submit-match-result-form :players="players" @submit="submitForm" />
       </div>
       <div v-if="!isLoading && !isErrorView && isAddedView">
         <div>Match added.</div>
@@ -26,7 +26,7 @@
 
 <script>
 import { MatchService } from "@/services/match";
-import MatchForm from "@/components/forms/MatchForm.vue";
+import SubmitMatchResultForm from "@/components/forms/SubmitMatchResultForm.vue";
 import LoadingSpinner from "@/components/ui/LoadingSpinner.vue";
 import ErrorMessage from "@/components/ui/ErrorMessage.vue";
 
@@ -40,7 +40,7 @@ export default {
     },
   },
   components: {
-    MatchForm,
+    SubmitMatchResultForm,
     LoadingSpinner,
     ErrorMessage,
   },
