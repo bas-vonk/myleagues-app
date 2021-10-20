@@ -21,7 +21,7 @@
             <input
               class="form-control form-control-sm"
               v-model="homePlayerScore"
-              type="text"
+              type="number"
               style="width: 100%"
             />
           </div>
@@ -30,7 +30,7 @@
             <input
               class="form-control form-control-sm"
               v-model="awayPlayerScore"
-              type="text"
+              type="number"
               style="width: 100%"
             />
           </div>
@@ -75,9 +75,9 @@ export default {
   emits: ["submit"],
   data() {
     return {
-      homePlayerId: undefined,
+      homePlayerId: "",
       homePlayerScore: undefined,
-      awayPlayerId: undefined,
+      awayPlayerId: "",
       awayPlayerScore: undefined,
       date: dateDefaultValue,
     };
@@ -109,6 +109,7 @@ export default {
 </script>
 
 <style lang="css" scoped>
+/* Chrome, Safari, Edge, Opera */
 input[type="date"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   display: none;
@@ -117,13 +118,28 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   -webkit-appearance: none;
   display: none;
 }
-button {
-  width: 100%;
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
 button {
   background-color: #f79e02;
   border-style: none;
-  margin: 0.5rem 0 0 0;
+}
+button,
+input,
+select {
+  margin: 0.1rem auto;
+  width: 95%;
 }
 input,
 select {
