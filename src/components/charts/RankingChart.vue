@@ -9,15 +9,7 @@
 </template>
 
 <script>
-import {
-  MyLeaguesLineController,
-  Chart,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Tooltip,
-} from "./MyLeaguesLineController.js";
+import Chart from "chart.js/auto";
 
 import LoadingSpinner from "@/components/ui/LoadingSpinner.vue";
 import ErrorMessage from "@/components/ui/ErrorMessage.vue";
@@ -36,7 +28,7 @@ export default {
       errorMessage: "",
       chart: undefined,
       chartData: {
-        type: "MyLeaguesLine",
+        type: "line",
         data: {
           labels: [],
           datasets: [],
@@ -47,19 +39,43 @@ export default {
             mode: "index",
           },
           maintainAspectRatio: false,
-          legend: { display: false },
           layout: {
             padding: {
               left: 0,
-              right: 60,
-              top: 20,
+              right: 0,
+              top: 0,
               bottom: 0,
             },
           },
           plugins: {
+            legend: {
+              display: true,
+              position: "right",
+            },
             tooltip: {
               enabled: true,
               position: "nearest",
+              itemSort: (a, b) => {
+                return b.raw - a.raw;
+              },
+              callbacks: {
+                label: function (context) {
+                  var points = [];
+
+                  context.chart.data.datasets.forEach((dataset) => {
+                    points.push(dataset.data[context.dataIndex]);
+                  });
+
+                  points.sort(function (a, b) {
+                    return b - a;
+                  });
+
+                  let username = context.dataset.label.match(/\.\s(.*)\s\(/)[1];
+                  let position = points.indexOf(context.raw, 0) + 1;
+
+                  return `${position}. ${username} (${context.raw})`;
+                },
+              },
             },
           },
         },
@@ -116,13 +132,6 @@ export default {
       ds.borderWidth = 1;
       ds.tension = 0.25; // Smooth curve
     }, this);
-
-    Chart.register(MyLeaguesLineController);
-    Chart.register(CategoryScale);
-    Chart.register(LinearScale);
-    Chart.register(PointElement);
-    Chart.register(LineElement);
-    Chart.register(Tooltip);
 
     var ctx = this.$refs.rankingChart.getContext("2d");
     this.chart = new Chart(ctx, this.chartData);

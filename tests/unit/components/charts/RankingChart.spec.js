@@ -24,6 +24,31 @@ describe("RankingChart.vue", () => {
     wrapper.unmount();
   });
 
+  it("Shall render a chart with the complete ranking history.", async () => {
+    // Define the mocked API request
+    moxios.stubRequest(`league/${leagueId}/ranking_history`, {
+      status: 200,
+      response: rankingHistoryResponse,
+    });
+
+    wrapper = await mount(RankingChart, {
+      propsData: { leagueId: leagueId },
+    });
+
+    // After the promise is resolved, the component should
+    // 1. Have succesfully rendered the canvas element
+    // 2. Have the rankingHistory stored
+    await helpers.awaitMoxios();
+
+    expect(wrapper.find("canvas").exists()).toBe(true);
+    expect(wrapper.vm.chartData.data.labels).toStrictEqual(
+      rankingHistoryResponse.data.attributes.ranking_history.labels
+    );
+    expect(wrapper.vm.chartData.data.datasets).toStrictEqual(
+      rankingHistoryResponse.data.attributes.ranking_history.datasets
+    );
+  });
+
   it("Shall render a loading spinner when the API call is pending.", async () => {
     // Define the mocked API request
     moxios.stubRequest(`league/${leagueId}/ranking_history`, {
@@ -66,28 +91,13 @@ describe("RankingChart.vue", () => {
     expect(wrapper.vm.isErrorView).toBe(true);
   });
 
-  it("Shall render a chart with the complete ranking history.", async () => {
-    // Define the mocked API request
-    moxios.stubRequest(`league/${leagueId}/ranking_history`, {
-      status: 200,
-      response: rankingHistoryResponse,
-    });
-
+  it("Shall apply styling to the chart.", async () => {
+    // Mount the component
     wrapper = await mount(RankingChart, {
       propsData: { leagueId: leagueId },
     });
 
-    // After the promise is resolved, the component should
-    // 1. Have succesfully rendered the canvas element
-    // 2. Have the rankingHistory stored
-    await helpers.awaitMoxios();
-
-    expect(wrapper.find("canvas").exists()).toBe(true);
-    expect(wrapper.vm.chartData.data.labels).toStrictEqual(
-      rankingHistoryResponse.data.attributes.ranking_history.labels
-    );
-    expect(wrapper.vm.chartData.data.datasets).toStrictEqual(
-      rankingHistoryResponse.data.attributes.ranking_history.datasets
-    );
+    let itemSort = wrapper.vm.chartData.options.plugins.tooltip.itemSort;
+    expect(itemSort({ raw: 1 }, { raw: 2 })).toBe(1);
   });
 });
