@@ -7,7 +7,7 @@ import {
 } from "@/store/mutation-types.js";
 
 describe("@/store/index.js", () => {
-  it("Tests the root module of the store (mutations).", async () => {
+  it("Shall store global state for the application (like loading).", async () => {
     store.commit(SET_IS_GLOBAL_LOADING, true);
     expect(store.getters["isGlobalLoading"]).toBe(true);
 

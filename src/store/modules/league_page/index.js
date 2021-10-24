@@ -8,7 +8,6 @@ const state = {
   matches: [],
   players: [],
   ranking: [],
-  rankingHistory: undefined,
   leagueService: new LeagueService(),
 };
 const getters = {
@@ -19,12 +18,8 @@ const getters = {
   matches: (state) => state.matches,
   players: (state) => state.players,
   ranking: (state) => state.ranking,
-  rankingHistory: (state) => state.rankingHistory,
 };
 const actions = {
-  AddMatch({ commit }, payload) {
-    commit("addMatch", payload);
-  },
   async GetForIdAndStore({ commit }, leagueId) {
     // Call the service
     const responseData = await state.leagueService.read(leagueId);
@@ -43,9 +38,6 @@ const actions = {
   },
 };
 const mutations = {
-  addMatch(state, match) {
-    state.matches.unshift(match);
-  },
   setName(state, name) {
     state.name = name;
   },
@@ -66,9 +58,6 @@ const mutations = {
   },
   setRanking(state, ranking) {
     state.ranking = ranking;
-  },
-  setRankingHistory(state, rankingHistory) {
-    state.rankingHistory = rankingHistory;
   },
 };
 export default {

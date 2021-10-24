@@ -21,7 +21,7 @@ const wrapper = mount(SubmitMatchResultForm, {
 });
 
 describe("SubmitMatchResultForm.vue", () => {
-  it("Tests the watchers that check that players don't play themselves.", async () => {
+  it("Shall have a form that collects and emits match data.", async () => {
     // Set the first dropdown to "andre" with value "10"
     await wrapper.findAll("select").at(0).findAll("option").at(1).setSelected();
     expect(wrapper.findAll("option:checked").at(0).element.value).toBe("ab-10");

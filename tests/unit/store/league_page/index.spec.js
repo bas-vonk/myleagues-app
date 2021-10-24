@@ -1,15 +1,21 @@
 import { Api } from "@/api";
 import { store } from "@/store";
 
-import { leagueResponse } from "./league";
 import moxios from "moxios";
+import { leagueResponse } from "./leagueResponse.js";
+import { Helpers } from "./../../helpers.js";
 
-const flushPromises = require("flush-promises");
+describe("Shall collect and store data to show on the league detail page.", () => {
+  let helpers;
 
-describe("Store: league page.", () => {
-  // Mock the API
-  beforeEach(() => moxios.install(Api));
-  afterEach(() => moxios.uninstall(Api));
+  beforeEach(() => {
+    // Mock the API
+    moxios.install(Api);
+    helpers = new Helpers();
+  });
+  afterEach(() => {
+    moxios.uninstall(Api);
+  });
 
   it("Shall call the API to get a league and store the results.", async () => {
     let leagueId = 1;
@@ -21,7 +27,7 @@ describe("Store: league page.", () => {
 
     store.dispatch("league_page/GetForIdAndStore", leagueId);
 
-    await flushPromises();
+    await helpers.awaitMoxios();
 
     expect(store.getters["league_page/joinCode"]).toBe(
       leagueResponse.data.attributes.join_code

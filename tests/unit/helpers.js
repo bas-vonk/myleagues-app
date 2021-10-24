@@ -4,6 +4,7 @@ export class Helpers {
   constructor(wrapper) {
     this.wrapper = wrapper;
   }
+
   /**
    * Returns promise on moxios
    *

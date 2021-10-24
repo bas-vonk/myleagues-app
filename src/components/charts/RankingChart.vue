@@ -1,20 +1,24 @@
 <template>
   <loading-spinner v-if="isLoading"></loading-spinner>
-  <div class="alert alert-warning" v-if="isErrorView">
-    {{ errorMessage }}
-  </div>
-  <canvas id="ranking-chart"></canvas>
+  <error-message
+    v-if="isErrorView"
+    :errorMessage="errorMessage"
+    @close="resetView()"
+  ></error-message>
+  <canvas id="ranking-chart" ref="rankingChart"></canvas>
 </template>
 
 <script>
 import Chart from "chart.js";
 import LoadingSpinner from "@/components/ui/LoadingSpinner.vue";
+import ErrorMessage from "@/components/ui/ErrorMessage.vue";
 import { LeagueService } from "@/services/league";
 
 export default {
   props: ["leagueId"],
   components: {
     LoadingSpinner,
+    ErrorMessage,
   },
   data() {
     return {
@@ -44,6 +48,10 @@ export default {
     };
   },
   methods: {
+    resetView() {
+      this.isErrorView = false;
+      this.errorMessage = "";
+    },
     getRandomColor() {
       var color = "#";
       var possible = "0123456789";
@@ -72,9 +80,12 @@ export default {
     } catch (error) {
       this.isErrorView = true;
       this.errorMessage = error.message;
-      return;
     } finally {
       this.isLoading = false;
+    }
+
+    if (this.isErrorView) {
+      return;
     }
 
     this.chartData.data.labels = rankingHistory.labels;
@@ -129,7 +140,7 @@ export default {
       },
     });
 
-    var ctx = document.getElementById("ranking-chart").getContext("2d");
+    var ctx = this.$refs.rankingChart.getContext("2d");
     this.chart = new Chart(ctx, this.chartData);
   },
 };
