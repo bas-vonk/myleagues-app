@@ -5,7 +5,7 @@ import RankingChart from "@/components/charts/RankingChart.vue";
 import LoadingSpinner from "@/components/ui/LoadingSpinner.vue";
 
 import moxios from "moxios";
-import { rankingHistoryResponse } from "./rankingHistoryResponse.js";
+import { rankingHistoryResponse } from "./../../data/responses/get_league_id_ranking_history.js";
 import { Helpers } from "./../../helpers.js";
 
 const leagueId = 1;

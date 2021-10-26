@@ -1,6 +1,6 @@
 import { shallowMount } from "@vue/test-utils";
 
-import { leaguesResponse } from "./leaguesResponse.js";
+import { leaguesResponse } from "./../data/responses/get_user_leagues.js";
 import { store } from "@/store";
 
 import HomePage from "@/views/HomePage.vue";

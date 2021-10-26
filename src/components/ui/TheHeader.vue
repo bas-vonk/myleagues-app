@@ -66,9 +66,8 @@
               class="nav-link text-white"
               role="button"
               data-bs-toggle="dropdown"
+              >My Leagues</a
             >
-              My Leagues
-            </a>
             <ul
               class="dropdown-menu dropdown-menu-end"
               aria-labelledby="navbarDropdownMenuLink"
@@ -95,7 +94,11 @@
               class="dropdown-menu dropdown-menu-end"
               aria-labelledby="navbarDropdownMenuLink"
             >
-              <li><a class="dropdown-item" @click="logout">Logout</a></li>
+              <li>
+                <a class="dropdown-item" @click="logout" ref="logoutButton"
+                  >Logout</a
+                >
+              </li>
             </ul>
           </li>
         </ul>

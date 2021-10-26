@@ -2,7 +2,7 @@ import { Api } from "@/api";
 import { store } from "@/store";
 
 import moxios from "moxios";
-import { leagueResponse } from "./leagueResponse.js";
+import { leagueResponse } from "./../../data/responses/get_league.js";
 import { Helpers } from "./../../helpers.js";
 
 describe("Shall collect and store data to show on the league detail page.", () => {

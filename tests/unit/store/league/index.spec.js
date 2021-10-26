@@ -2,8 +2,7 @@ import { Api } from "@/api";
 import { store } from "@/store";
 
 import moxios from "moxios";
-import { league } from "./league.js";
-import { leagueResponse } from "./leagueResponse.js";
+import { league, leagueResponse } from "./../../data/responses/post_league.js";
 import { Helpers } from "./../../helpers.js";
 
 describe("Shall store and mutate global state for a league and store new leagues in the backend.", () => {
