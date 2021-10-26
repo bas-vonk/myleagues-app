@@ -31,7 +31,7 @@ describe("RankingChart.vue", () => {
       response: rankingHistoryResponse,
     });
 
-    wrapper = await mount(RankingChart, {
+    wrapper = mount(RankingChart, {
       propsData: { leagueId: leagueId },
     });
 
