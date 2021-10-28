@@ -147,14 +147,15 @@ select {
   text-align-last: center;
 }
 .form-control-sm {
-  margin: 0.5rem 0 0.5rem 0;
+  margin: auto;
 }
 .col-2 {
   padding: 0;
   margin: auto 0.1rem auto 0.1rem;
 }
 .col-4 {
-  margin: 0 0.25rem 0 0.25rem;
+  margin: auto;
+  padding: 0 0.25rem 0 0.25rem;
 }
 .score {
   width: 95%;

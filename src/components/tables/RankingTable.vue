@@ -25,8 +25,12 @@
 
 <script>
 export default {
-  props: ["ranking", "username"]
+  props: ["ranking", "username"],
 };
 </script>
 
-<style lang="css" scoped></style>
+<style lang="css" scoped>
+.table {
+  margin-bottom: 0rem;
+}
+</style>

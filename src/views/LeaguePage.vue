@@ -10,12 +10,12 @@
     <div class="row">
       <div class="borders col-md-5">
         <div class="row">
-          <div class="borders col-md-12 extra-padding">
+          <div class="borders col-md-12 extra-padding-bottom">
             <submit-result-card :players="players" :leagueId="id" />
           </div>
         </div>
         <div class="row">
-          <div class="borders col-md-12 extra-padding">
+          <div class="borders col-md-12 extra-padding-bottom">
             <all-matches-card :matches="matches" />
           </div>
         </div>
@@ -106,7 +106,7 @@ export default {
   text-align: right;
   background: rgba(0, 0, 0, 0%) !important;
   border: none;
-  padding: 1rem 1rem !important;
+  padding-bottom: 0.5rem !important;
   margin-bottom: 0 !important;
   min-height: 3rem;
 }
@@ -115,10 +115,10 @@ export default {
   padding-left: 5%;
   padding-right: 5%;
   overflow: scroll;
-  max-height: calc(var(--vh, 1vh) * 90);
+  height: calc(var(--vh, 1vh) * 85);
   width: 100vw;
 }
-.extra-padding {
-  padding: 1.5rem;
+.extra-padding-bottom {
+  padding-bottom: 1.5rem;
 }
 </style>

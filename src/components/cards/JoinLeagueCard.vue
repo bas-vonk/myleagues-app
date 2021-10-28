@@ -1,6 +1,6 @@
 <template>
   <base-card :isNonTransparent="true">
-    <template v-slot:header> Join League </template>
+    <template v-slot:header>Join League</template>
     <template v-slot:default>
       <loading-spinner v-if="isLoading"></loading-spinner>
       <error-message

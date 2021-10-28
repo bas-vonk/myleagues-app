@@ -1,5 +1,5 @@
 <template>
-  <base-card customCardHeight="33rem">
+  <base-card customCardHeight="31.5rem">
     <template v-slot:header>
       <div class="row">
         <div class="col header-text" id="rankingSystem">
@@ -69,17 +69,11 @@ export default {
 <style lang="css" scoped>
 #rankingSystem {
   opacity: 0.3 !important;
+  font-size: 0.75rem;
 }
 button {
   background-color: #f79e02;
   border-style: none;
   width: 5rem;
-}
-.header-text {
-  white-space: nowrap;
-  width: 33%;
-  padding-top: 0rem;
-  padding-bottom: 0rem;
-  margin: auto;
 }
 </style>

@@ -1,11 +1,15 @@
 <template>
-  <base-card :isTransparent="true" @click="goToLeaguePage()">
+  <base-card @click="goToLeaguePage()" :showScrollIcons="true">
     <template v-slot:header>
       <div class="row">
         <div class="col header-text"></div>
-        <div class="col header-text">{{ leagueTitle }}</div>
         <div class="col header-text">
-          <span class="joincode" style="font-size: 14px">
+          <div class="text-overflow-center">
+            {{ leagueTitle }}
+          </div>
+        </div>
+        <div class="col header-text">
+          <span class="joincode">
             {{ league.join_code }}
           </span>
         </div>
@@ -52,11 +56,13 @@ export default {
 </script>
 
 <style lang="css" scoped>
-.header-text {
-  white-space: nowrap;
-  width: 33%;
-}
 .joincode {
-  font-size: 14px;
+  font-size: 0.8rem;
+}
+.text-overflow-center {
+  padding: none;
+  margin-left: -100%;
+  margin-right: -100%;
+  text-align: center;
 }
 </style>
