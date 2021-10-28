@@ -1,6 +1,6 @@
 <template>
-  <div class="card text-white bg-primary mb-3">
-    <div class="card-header">
+  <base-card customCardHeight="33rem">
+    <template v-slot:header>
       <div class="row">
         <div class="col header-text" id="rankingSystem">
           {{ rankingSystem }}
@@ -16,27 +16,30 @@
           </button>
         </div>
       </div>
-    </div>
-    <div class="card-body">
+    </template>
+    <template v-slot:default>
       <ranking-table
         v-if="showTable"
         :ranking="ranking"
         :username="username"
       ></ranking-table>
       <ranking-chart v-if="showChart" :leagueId="leagueId"></ranking-chart>
-    </div>
-  </div>
+    </template>
+  </base-card>
 </template>
 
 <script>
 import RankingTable from "@/components/tables/RankingTable";
 import RankingChart from "@/components/charts/RankingChart";
 
+import BaseCard from "@/components/ui/BaseCard";
+
 export default {
   props: ["leagueId", "ranking", "username", "joinCode", "rankingSystem"],
   components: {
     RankingTable,
     RankingChart,
+    BaseCard,
   },
   data() {
     return {
@@ -72,32 +75,11 @@ button {
   border-style: none;
   width: 5rem;
 }
-.card {
-  height: 33rem;
-  overflow: hidden;
-  background: rgba(165, 180, 200, 80%) !important;
-  box-shadow: 0.2rem 0.2rem rgba(0, 0, 0, 20%) !important;
-  border-width: 1px;
-  border-color: rgba(255, 255, 255, 25%);
-}
 .header-text {
   white-space: nowrap;
   width: 33%;
   padding-top: 0rem;
   padding-bottom: 0rem;
   margin: auto;
-}
-.card-header {
-  height: 4rem;
-  padding-top: 1.1rem;
-  padding-bottom: 1.1rem;
-  background-color: #3f8cd8;
-}
-.card-body {
-  max-height: 26rem;
-  overflow-y: auto;
-}
-.joincode {
-  font-size: 0.75rem;
 }
 </style>
