@@ -99,7 +99,6 @@ export default {
   box-shadow: 0.2rem 0.2rem rgba(0, 0, 0, 20%) !important;
   border-width: 1px;
   border-color: rgba(255, 255, 255, 25%);
-  margin-bottom: 0 !important;
 }
 .non-transparant {
   background: #3f8cd8 !important;

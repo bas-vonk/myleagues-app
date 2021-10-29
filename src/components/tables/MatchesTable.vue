@@ -60,6 +60,9 @@ export default {
 </script>
 
 <style lang="css" scoped>
+.table {
+  font-size: 1rem;
+}
 .match-enter-from {
   opacity: 1;
   transform: translateY(-30px);

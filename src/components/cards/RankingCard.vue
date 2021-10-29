@@ -1,5 +1,5 @@
 <template>
-  <base-card customCardHeight="31.5rem">
+  <base-card customCardHeight="29.5rem">
     <template v-slot:header>
       <div class="row">
         <div class="col header-text" id="rankingSystem">

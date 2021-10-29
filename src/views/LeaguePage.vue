@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row">
       <div class="borders col-md-12">
-        <div id="leagueNameBar" class="card text-white bg-primary mb-3 h1">
+        <div id="leagueNameBar" class="card text-white bg-primary mb-3 h2">
           {{ name }}
         </div>
       </div>
@@ -10,12 +10,12 @@
     <div class="row">
       <div class="borders col-md-5">
         <div class="row">
-          <div class="borders col-md-12 extra-padding-bottom">
+          <div class="borders col-md-12 extra-padding">
             <submit-result-card :players="players" :leagueId="id" />
           </div>
         </div>
         <div class="row">
-          <div class="borders col-md-12 extra-padding-bottom">
+          <div class="borders col-md-12 extra-padding">
             <all-matches-card :matches="matches" />
           </div>
         </div>
@@ -111,14 +111,15 @@ export default {
   min-height: 3rem;
 }
 .container {
-  margin-top: 2.5%;
+  margin-top: 1rem;
   padding-left: 5%;
   padding-right: 5%;
+  padding-bottom: 3rem;
   overflow: scroll;
   height: calc(var(--vh, 1vh) * 85);
   width: 100vw;
 }
-.extra-padding-bottom {
-  padding-bottom: 1.5rem;
+.extra-padding {
+  padding: 0rem 0.75rem 1.5rem 0.75rem;
 }
 </style>

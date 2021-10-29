@@ -1,5 +1,5 @@
 <template>
-  <base-card :showScrollIcons="true">
+  <base-card :showScrollIcons="true" customCardHeight="14rem">
     <template v-slot:header>Results</template>
     <template v-slot:default>
       <matches-table :matches="matches" />

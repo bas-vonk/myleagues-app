@@ -117,6 +117,7 @@ export default {
 .container {
   padding-top: 20%;
   width: 18rem;
+  height: calc(var(--vh, 1vh) * 100);
   padding: auto;
   margin: auto;
 }

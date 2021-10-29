@@ -1,5 +1,5 @@
 <template>
-  <base-card :isNonTransparent="true">
+  <base-card :isNonTransparent="true" customCardHeight="14rem">
     <template v-slot:header>Submit result</template>
     <template v-slot:default>
       <loading-spinner v-if="isLoading"></loading-spinner>
