@@ -44,6 +44,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .container {
+  position: relative;
   margin-top: 3rem;
   padding-left: 5%;
   padding-right: 5%;

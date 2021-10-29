@@ -110,4 +110,8 @@ export default {
   background-position: 50% 60%;
   background-attachment: local;
 }
+.fixed-position {
+  position: fixed;
+  height: 100vh;
+}
 </style>

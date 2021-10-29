@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark">
+  <nav class="navbar navbar-expand-lg navbar-dark" id="mainNavbar">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">MYLEAGUES</a>
       <button
@@ -110,7 +110,6 @@
 <script>
 export default {
   props: ["leagues", "username"],
-  emits: ["toggleNavbar"],
   data() {
     return {
       navbarIsCollapsed: true,
@@ -131,10 +130,17 @@ export default {
     toggleNavbarCollapse() {
       this.navbarIsCollapsed = !this.navbarIsCollapsed;
 
+      let navbar = document.getElementById("navbarNavDropdown");
+      let body = document.querySelector("body");
+
       // Actually perform the collapse
+      // (if the menu is open, lock the position of the app)
       if (this.navbarIsCollapsed === true) {
-        let navbar = document.getElementById("navbarNavDropdown");
         navbar.classList.remove("show");
+        body.classList.remove("fixed-position");
+      } else {
+        navbar.classList.add("show");
+        body.classList.add("fixed-position");
       }
     },
   },
@@ -153,30 +159,14 @@ export default {
       return iso3166CountryCode ? iso3166CountryCode : fallBackCountryCode;
     },
   },
-  watch: {
-    navbarIsCollapsed(newValue) {
-      // If not on mobile mode, do nothing (collapse navbar doesn't exist)
-      // TODO: Use some proper indicator to check for mobile mode (instead of >1000)
-      if (window.innerWidth > 1000) {
-        return;
-      }
-
-      let extraVhForMenu = 15;
-
-      if (newValue === false) {
-        document.documentElement.style.setProperty(
-          "--extra-menu-vh",
-          `${extraVhForMenu}vh`
-        );
-      } else {
-        document.documentElement.style.setProperty("--extra-menu-vh", 0);
-      }
-    },
-  },
 };
 </script>
 
 <style>
+.hover {
+  position: fixed;
+  z-index: 2000;
+}
 .nav-item {
   margin-left: 1rem;
   margin-right: 1rem;
