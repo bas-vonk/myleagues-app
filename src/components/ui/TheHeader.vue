@@ -128,17 +128,25 @@ export default {
       this.$router.push("login");
     },
     toggleNavbarCollapse() {
+      // TODO: Better indicator for mobile view
+      if (window.screen.width > 991) {
+        return;
+      }
+
       this.navbarIsCollapsed = !this.navbarIsCollapsed;
 
       let navbar = document.getElementById("navbarNavDropdown");
+      let overlay = document.getElementById("overlay");
       let body = document.querySelector("body");
 
       // Actually perform the collapse
       // (if the menu is open, lock the position of the app)
       if (this.navbarIsCollapsed === true) {
+        overlay.style.display = "none";
         navbar.classList.remove("show");
         body.classList.remove("fixed-position");
       } else {
+        overlay.style.display = "block";
         navbar.classList.add("show");
         body.classList.add("fixed-position");
       }

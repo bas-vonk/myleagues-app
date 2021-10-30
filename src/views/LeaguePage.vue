@@ -111,12 +111,11 @@ export default {
   min-height: 3rem;
 }
 .container {
-  margin-top: 1rem;
+  padding-top: 1rem;
   padding-left: 5%;
   padding-right: 5%;
-  padding-bottom: 3rem;
   overflow: scroll;
-  height: calc(var(--vh, 1vh) * 85);
+  height: calc(var(--vh, 1vh) * 90);
   width: 100vw;
 }
 .extra-padding {
