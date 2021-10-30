@@ -95,9 +95,7 @@
               aria-labelledby="navbarDropdownMenuLink"
             >
               <li>
-                <a class="dropdown-item" @click="logout" ref="logoutButton"
-                  >Logout</a
-                >
+                <a class="dropdown-item" @click="logout">Logout</a>
               </li>
             </ul>
           </li>

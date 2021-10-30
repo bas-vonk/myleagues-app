@@ -14,7 +14,14 @@ describe("The Header", () => {
 
     var username = "bas";
 
+    // Mock the overlay
+    const overlayDiv = document.createElement("div");
+    overlayDiv.id = "overlay";
+    overlayDiv.style.display = "none";
+    document.body.appendChild(overlayDiv);
+
     var wrapper = mount(TheHeader, {
+      attachTo: document.body,
       props: {
         username: username,
         leagues: leaguesResponse.data.map((league) => league.attributes),

@@ -121,7 +121,6 @@ export default {
   display: none; /* Hidden by default */
   width: 100%; /* Full width (cover the whole page) */
   height: 100%; /* Full height (cover the whole page) */
-  /* top: 16rem; */
   left: 0;
   right: 0;
   bottom: 0;
