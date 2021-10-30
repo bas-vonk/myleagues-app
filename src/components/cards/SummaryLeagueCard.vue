@@ -1,30 +1,38 @@
 <template>
-  <div class="card text-white" @click="goToLeaguePage">
-    <div class="card-header">
+  <base-card @click="goToLeaguePage()" :showScrollIcons="true">
+    <template v-slot:header>
       <div class="row">
-        <div class="header-text"></div>
-        <div class="header-text">{{ leagueTitle }}</div>
-        <div class="header-text">
-          <span class="joincode">{{ league.join_code }}</span>
+        <div class="col header-text"></div>
+        <div class="col header-text">
+          <div class="text-overflow-center">
+            {{ leagueTitle }}
+          </div>
+        </div>
+        <div class="col header-text">
+          <span class="joincode">
+            {{ league.join_code }}
+          </span>
         </div>
       </div>
-    </div>
-    <div class="card-body">
+    </template>
+    <template v-slot:default>
       <ranking-table
         :username="username"
         :ranking="league.ranking"
       ></ranking-table>
-    </div>
-  </div>
+    </template>
+  </base-card>
 </template>
 
 <script>
 import RankingTable from "@/components/tables/RankingTable";
+import BaseCard from "@/components/ui/BaseCard";
 
 export default {
   props: ["league"],
   components: {
-    RankingTable,
+    RankingTable: RankingTable,
+    BaseCard: BaseCard,
   },
   data() {
     return {
@@ -48,31 +56,13 @@ export default {
 </script>
 
 <style lang="css" scoped>
-.card {
-  height: 15rem;
-  cursor: pointer;
-  overflow: hidden;
-  background: rgba(165, 180, 200, 80%) !important;
-  box-shadow: 0.2rem 0.2rem rgba(0, 0, 0, 20%) !important;
-  border-width: 1px;
-  border-color: rgba(255, 255, 255, 25%);
-}
-.header-text {
-  white-space: nowrap;
-  width: 33%;
-}
 .joincode {
-  font-size: 14px;
+  font-size: 0.8rem;
 }
-.card-header {
-  height: 4rem;
+.text-overflow-center {
+  padding: none;
+  margin-left: -100%;
+  margin-right: -100%;
   text-align: center;
-  padding-top: 1.5rem;
-  padding-bottom: 1.5rem;
-  background-color: #3f8cd8;
-}
-.card-body {
-  max-height: 11rem;
-  overflow-y: auto;
 }
 </style>

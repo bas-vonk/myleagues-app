@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row">
       <div class="borders col-md-12">
-        <div id="leagueNameBar" class="card text-white bg-primary mb-3 h1">
+        <div id="leagueNameBar" class="card text-white bg-primary mb-3 h2">
           {{ name }}
         </div>
       </div>
@@ -106,19 +106,19 @@ export default {
   text-align: right;
   background: rgba(0, 0, 0, 0%) !important;
   border: none;
-  padding: 1rem 1rem !important;
+  padding-bottom: 0.5rem !important;
   margin-bottom: 0 !important;
   min-height: 3rem;
 }
 .container {
-  margin-top: 2.5%;
+  padding-top: 1rem;
   padding-left: 5%;
   padding-right: 5%;
   overflow: scroll;
-  max-height: calc(var(--vh, 1vh) * 90);
+  height: calc(var(--vh, 1vh) * 90);
   width: 100vw;
 }
 .extra-padding {
-  padding: 1.5rem;
+  padding: 0rem 0.75rem 1.5rem 0.75rem;
 }
 </style>

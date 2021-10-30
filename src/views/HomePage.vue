@@ -44,14 +44,14 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .container {
-  margin-top: 2.5%;
+  padding-top: 3rem;
   padding-left: 5%;
   padding-right: 5%;
   overflow: scroll;
-  height: calc(var(--vh, 1vh) * 85);
+  height: calc(var(--vh, 1vh) * 90);
   width: 100vw;
 }
 .extra-padding {
-  padding: 1.5rem;
+  padding: 0rem 0.75rem 1.5rem 0.75rem;
 }
 </style>

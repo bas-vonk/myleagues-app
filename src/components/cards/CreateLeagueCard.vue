@@ -1,9 +1,9 @@
 <template>
-  <div class="card text-white bg-primary mb-3">
-    <div class="card-header">
+  <base-card :isNonTransparent="true">
+    <template v-slot:header>
       {{ $t("components.cards.createLeagueCard.title") }}
-    </div>
-    <div class="card-body">
+    </template>
+    <template v-slot:default>
       <loading-spinner v-if="isLoading"></loading-spinner>
       <error-message
         v-if="isErrorView"
@@ -15,18 +15,20 @@
       </div>
       <div v-if="isCreatedView">League created. Join Code: {{ joinCode }}</div>
       <div v-if="isCreatedView || isErrorView">
-        <small id="modeCreateAnotherLeague" @click="resetView()"
+        <small style="cursor: pointer; color: black" @click="resetView()"
           >Create another league.</small
         >
       </div>
-    </div>
-  </div>
+    </template>
+  </base-card>
 </template>
 
 <script>
-import LoadingSpinner from "@/components/ui/LoadingSpinner.vue";
 import CreateLeagueForm from "@/components/forms/CreateLeagueForm.vue";
+
+import LoadingSpinner from "@/components/ui/LoadingSpinner.vue";
 import ErrorMessage from "@/components/ui/ErrorMessage.vue";
+import BaseCard from "@/components/ui/BaseCard";
 
 export default {
   name: "CreateLeagueCard",
@@ -34,6 +36,7 @@ export default {
     LoadingSpinner,
     CreateLeagueForm,
     ErrorMessage,
+    BaseCard,
   },
   data() {
     return {
@@ -83,24 +86,4 @@ export default {
 };
 </script>
 
-<style lang="css" scoped>
-.card-header {
-  height: 4rem;
-  text-align: center;
-  padding-top: 1.5rem;
-  padding-bottom: 1.5rem;
-  background-color: #3f8cd8;
-  border: none;
-}
-.card {
-  height: 100%;
-  background-color: #3f8cd8 !important;
-  box-shadow: 0.2rem 0.2rem rgba(0, 0, 0, 20%) !important;
-  border-width: 1px;
-  border-color: rgba(255, 255, 255, 25%);
-}
-#modeCreateAnotherLeague {
-  cursor: pointer;
-  color: black;
-}
-</style>
+<style lang="css" scoped></style>

@@ -1,4 +1,4 @@
-image: node:latest
+image: node:16.13.0-slim
 
 # This file is a template, and might need editing before it works on your project.
 # To contribute improvements to CI/CD templates, please follow the Development guide at:

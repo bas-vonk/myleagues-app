@@ -10,7 +10,10 @@
     @close="resetErrorAndGoToLogin()"
     :errorMessage="globalErrorMessage"
   ></error-message>
-  <router-view v-if="!isGlobalError" />
+  <div id="page-content">
+    <div id="overlay"></div>
+    <router-view v-if="!isGlobalError" />
+  </div>
 </template>
 
 <script>
@@ -109,5 +112,25 @@ export default {
   background-size: cover;
   background-position: 50% 60%;
   background-attachment: local;
+}
+#page-content {
+  position: relative;
+}
+#overlay {
+  position: absolute; /* Sit on top of the page content */
+  display: none; /* Hidden by default */
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
+  z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+  cursor: pointer; /* Add a pointer on hover */
+}
+.fixed-position {
+  position: fixed;
+  height: 100vh;
+  z-index: 2000;
 }
 </style>

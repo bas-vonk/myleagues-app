@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import { createApp } from "vue";
 import App from "./App.vue";
 import VueGtag from "vue-gtag";
