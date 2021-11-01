@@ -70,10 +70,8 @@ const actions = {
     commit("setUsername", decoded_token.username);
   },
   SetLocale({ commit }, payload) {
-    let locale = payload.locale;
-
-    commit("locale", locale);
-    Cookies.set("locale", locale, { expires: 365 });
+    commit("setLocale", payload.locale);
+    Cookies.set("locale", payload.locale, { expires: 365 });
   },
 };
 const mutations = {

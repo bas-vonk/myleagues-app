@@ -68,7 +68,11 @@
 <script>
 var today = new Date();
 var dateDefaultValue =
-  today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
+  today.getFullYear() +
+  "-" +
+  ("0" + today.getMonth() + 1).slice(-2) +
+  "-" +
+  ("0" + today.getDate()).slice(-2);
 
 export default {
   props: ["players"],
