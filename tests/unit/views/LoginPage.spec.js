@@ -8,6 +8,7 @@ import { userLoginRequest } from "./../data/requests/post_user_login.js";
 import { userCreateRequest } from "./../data/requests/post_user_create.js";
 import { userLoginResponse } from "./../data/responses/post_user_login.js";
 import { userCreateResponse } from "./../data/responses/post_user_create.js";
+import { leaguesResponse } from "./../data/responses/get_user_leagues.js";
 
 import { Api } from "@/api";
 import LoginPage from "@/views/LoginPage.vue";
@@ -56,6 +57,11 @@ describe("LoginPage", () => {
       response: userLoginResponse,
     });
 
+    moxios.stubRequest(`user/leagues`, {
+      status: 200,
+      response: leaguesResponse,
+    });
+
     // Fill in the form
     wrapper.findAll("input").at(0).setValue(userLoginRequest.email);
     wrapper.findAll("input").at(1).setValue(userLoginRequest.password);
@@ -73,6 +79,11 @@ describe("LoginPage", () => {
     // Check whether the access token was stored in the app
     let accessToken = store.getters["user/accessToken"];
     expect(accessToken).toBe(userLoginResponse.access_token);
+
+    let leagues = store.getters["user_leagues/leagues"];
+    expect(leagues).toStrictEqual(
+      leaguesResponse.data.map((league) => league.attributes)
+    );
   });
 
   it("Shall render an error message upon failed login.", async () => {
@@ -154,5 +165,21 @@ describe("LoginPage", () => {
     await helpers.awaitMoxios();
 
     expect(wrapper.text()).toContain(errorMessage);
+  });
+
+  it("Shall render an error message when provided passwords don't match (upon registration).", async () => {
+    // Toggle the register mode
+    await wrapper.find("#modeSwitchText").trigger("click");
+
+    // Fill in the form
+    wrapper.findAll("input").at(0).setValue(userCreateRequest.email);
+    wrapper.findAll("input").at(1).setValue(userCreateRequest.password);
+    wrapper.findAll("input").at(2).setValue("different_confirmation_password");
+    wrapper.findAll("input").at(3).setValue(userCreateRequest.username);
+
+    // Trigger the submit event
+    await wrapper.find("form").trigger("submit.prevent");
+
+    expect(wrapper.text()).toContain(wrapper.vm.errorMessage);
   });
 });

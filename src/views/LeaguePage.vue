@@ -40,6 +40,18 @@ import SubmitResultCard from "@/components/cards/SubmitResultCard.vue";
 import AllMatchesCard from "@/components/cards/AllMatchesCard.vue";
 import RankingCard from "@/components/cards/RankingCard.vue";
 
+async function routeGuard(leagueId) {
+  try {
+    store.dispatch("setIsGlobalLoading", true, { root: true });
+    await store.dispatch("league_page/GetForIdAndStore", leagueId);
+  } catch (error) {
+    store.dispatch("setIsGlobalError", true, { root: true });
+    store.dispatch("setGlobalErrorMessage", error.message, { root: true });
+  } finally {
+    store.dispatch("setIsGlobalLoading", false, { root: true });
+  }
+}
+
 export default {
   name: "LeaguePage",
   props: ["id"],
@@ -49,28 +61,10 @@ export default {
     RankingCard,
   },
   async beforeRouteEnter(to) {
-    try {
-      store.dispatch("setIsGlobalLoading", true, { root: true });
-
-      await store.dispatch("league_page/GetForIdAndStore", to.params.id);
-    } catch (error) {
-      store.dispatch("setIsGlobalError", true, { root: true });
-      store.dispatch("setGlobalErrorMessage", error.message, { root: true });
-    } finally {
-      store.dispatch("setIsGlobalLoading", false, { root: true });
-    }
+    await routeGuard(to.params.id);
   },
   async beforeRouteUpdate(to) {
-    try {
-      store.dispatch("setIsGlobalLoading", true, { root: true });
-
-      await store.dispatch("league_page/GetForIdAndStore", to.params.id);
-    } catch (error) {
-      store.dispatch("setIsGlobalError", true, { root: true });
-      store.dispatch("setGlobalErrorMessage", error.message, { root: true });
-    } finally {
-      store.dispatch("setIsGlobalLoading", false, { root: true });
-    }
+    await routeGuard(to.params.id);
   },
   computed: {
     username() {

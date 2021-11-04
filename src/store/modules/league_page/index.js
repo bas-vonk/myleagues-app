@@ -20,11 +20,16 @@ const getters = {
   ranking: (state) => state.ranking,
 };
 const actions = {
-  async GetForIdAndStore({ commit }, leagueId) {
+  async GetForIdAndStore({ dispatch }, leagueId) {
     // Call the service
     const responseData = await state.leagueService.read(leagueId);
     const league = responseData.data.attributes;
 
+    dispatch("StoreLeague", league);
+
+    return league;
+  },
+  StoreLeague({ commit }, league) {
     // Store all info in the store
     commit("setName", league.name);
     commit("setRankingSystem", league.ranking_system);
@@ -33,8 +38,6 @@ const actions = {
     commit("setMatches", league.matches);
     commit("setPlayers", league.players);
     commit("setRanking", league.ranking);
-
-    return league;
   },
 };
 const mutations = {
