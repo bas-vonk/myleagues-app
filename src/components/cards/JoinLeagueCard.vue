@@ -87,7 +87,6 @@ export default {
       if (this.isAlreadyInLeague(formData)) {
         this.isErrorView = true;
         this.errorMessage = "You are already in this league.";
-        this.joinCode = undefined;
       } else {
         this.isJoinLeagueView = true;
       }
