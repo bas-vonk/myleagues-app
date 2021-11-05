@@ -1,6 +1,7 @@
 import { mount } from "@vue/test-utils";
 
 import { router } from "@/router";
+import { store } from "@/store";
 import { leaguesResponse } from "./../../data/responses/get_user_leagues.js";
 
 import TheHeader from "@/components/ui/TheHeader.vue";
@@ -27,13 +28,12 @@ describe("The Header", () => {
         leagues: leaguesResponse.data.map((league) => league.attributes),
       },
       global: {
-        plugins: [router],
+        // Add router to the plugins to resolve
+        // [Vue warn]: Failed to resolve component: router-link
+        plugins: [router, store],
         mocks: {
           $router: {
             push: jest.fn(),
-          },
-          $store: {
-            dispatch: jest.fn(),
           },
           $i18n: {
             locale: "nl",

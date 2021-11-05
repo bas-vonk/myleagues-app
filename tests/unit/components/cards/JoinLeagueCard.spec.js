@@ -131,7 +131,11 @@ describe("Join League card.", () => {
 
     // Add the league that is searched to the store,
     // so that the user is already in that league
-    wrapper.vm.$store.commit("addLeague", leagueResponse.data.attributes);
+    wrapper.vm.$store.commit(
+      "user_leagues/addLeague",
+      leagueResponse.data.attributes,
+      { root: true }
+    );
 
     // Mock the API call
     moxios.stubRequest(`league/?filter[join_code]=${joinCode}`, {

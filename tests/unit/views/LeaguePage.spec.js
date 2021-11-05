@@ -1,4 +1,4 @@
-import { mount } from "@vue/test-utils";
+import { shallowMount } from "@vue/test-utils";
 
 import { store } from "@/store";
 
@@ -34,7 +34,7 @@ describe("LeaguePage", () => {
     };
 
     // Create the wrapper for the page
-    wrapper = mount(LeaguePage, {
+    wrapper = shallowMount(LeaguePage, {
       global: {
         plugins: [store],
       },
