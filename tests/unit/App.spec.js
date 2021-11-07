@@ -78,6 +78,7 @@ describe("HomePage", () => {
     wrapper = mount(App, mountOptions);
 
     expect(store.getters["user/username"]).toBe("root");
+    expect(store.getters["user/emailAddress"]).toBe("root@root");
   });
 
   it("Shall load the leagues for a user when the user is already logged in.", async () => {
