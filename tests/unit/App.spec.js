@@ -3,6 +3,7 @@ import moxios from "moxios";
 
 import { Helpers } from "./helpers.js";
 import { router } from "@/router";
+import { i18n } from "@/locale";
 
 import { leaguesResponse } from "./data/responses/get_user_leagues.js";
 
@@ -29,13 +30,10 @@ describe("HomePage", () => {
         // Add router to the plugins to resolve
         // [Vue warn]: Failed to resolve component: router-link
         // [Vue warn]: Failed to resolve component: router-view
-        plugins: [router, store],
+        plugins: [router, store, i18n],
         mocks: {
           $router: {
             push: jest.fn(),
-          },
-          $i18n: {
-            locale: "nl",
           },
           $t: () => "mocked text",
         },

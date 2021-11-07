@@ -35,13 +35,13 @@
             >
               <li>
                 <a class="dropdown-item" @click="setLocale('en')">
-                  <span class="flag-icon flag-icon-gb"></span> English
-                </a>
+                  <span class="flag-icon flag-icon-gb"></span>English</a
+                >
               </li>
               <li>
                 <a class="dropdown-item" @click="setLocale('nl')">
-                  <span class="flag-icon flag-icon-nl"></span> Nederlands
-                </a>
+                  <span class="flag-icon flag-icon-nl"></span>Nederlands</a
+                >
               </li>
             </ul>
           </li>
