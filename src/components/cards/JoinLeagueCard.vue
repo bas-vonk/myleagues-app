@@ -105,7 +105,7 @@ export default {
 
       let params = { "filter[join_code]": joinCode };
 
-      const responseData = await leagueService.read("", params);
+      const responseData = await leagueService.read({ queryParams: params });
       return responseData.data.attributes;
     },
     resetView() {

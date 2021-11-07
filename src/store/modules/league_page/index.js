@@ -22,7 +22,7 @@ const getters = {
 const actions = {
   async GetForIdAndStore({ dispatch }, leagueId) {
     // Call the service
-    const responseData = await state.leagueService.read(leagueId);
+    const responseData = await state.leagueService.read({ id: leagueId });
     const league = responseData.data.attributes;
 
     dispatch("StoreLeague", league);

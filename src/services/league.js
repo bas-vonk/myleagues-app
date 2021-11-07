@@ -9,8 +9,8 @@ export class LeagueService extends BaseService {
     return this.client.post(`${this.namespace}`, params);
   }
 
-  read(id = "", params = {}) {
-    return this.client.get(`${this.namespace}/${id}`, { params: params });
+  read({ id = "", queryParams = {} }) {
+    return this.client.get(`${this.namespace}/${id}`, { params: queryParams });
   }
 
   get_ranking_history(id) {
