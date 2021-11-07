@@ -3,6 +3,7 @@ import { mount } from "@vue/test-utils";
 import { leagueResponse } from "./../../data/responses/get_league.js";
 
 import { store } from "@/store";
+import { i18n } from "@/locale";
 import RankingTable from "@/components/tables/RankingTable.vue";
 import SummaryLeagueCard from "@/components/cards/SummaryLeagueCard";
 
@@ -13,9 +14,15 @@ describe("Join League card.", () => {
   };
 
   beforeEach(() => {
+    // Set locale
+    i18n.locale = "en";
+
     wrapper = mount(SummaryLeagueCard, {
       props: props,
-      global: { plugins: [store], mocks: { $router: { push: jest.fn() } } },
+      global: {
+        plugins: [store, i18n],
+        mocks: { $router: { push: jest.fn() } },
+      },
     });
   });
 

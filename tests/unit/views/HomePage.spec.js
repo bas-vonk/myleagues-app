@@ -2,6 +2,7 @@ import { shallowMount } from "@vue/test-utils";
 
 import { leaguesResponse } from "./../data/responses/get_user_leagues.js";
 import { store } from "@/store";
+import { i18n } from "@/locale";
 
 import HomePage from "@/views/HomePage.vue";
 import SummaryLeagueCard from "@/components/cards/SummaryLeagueCard.vue";
@@ -12,6 +13,9 @@ describe("HomePage", () => {
   let wrapper;
 
   beforeEach(() => {
+    // Set locale
+    i18n.locale = "en";
+
     // Fill the store
     leaguesResponse.data.forEach(function (item) {
       store.commit("user_leagues/addLeague", item.attributes);
@@ -19,7 +23,7 @@ describe("HomePage", () => {
 
     wrapper = shallowMount(HomePage, {
       global: {
-        plugins: [store],
+        plugins: [store, i18n],
       },
     });
   });

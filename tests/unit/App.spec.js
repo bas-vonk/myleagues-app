@@ -3,22 +3,25 @@ import moxios from "moxios";
 
 import { Helpers } from "./helpers.js";
 import { router } from "@/router";
+import { store } from "@/store";
 import { i18n } from "@/locale";
 
 import { leaguesResponse } from "./data/responses/get_user_leagues.js";
 
 import { Api } from "@/api";
 import ErrorMessage from "@/components/ui/ErrorMessage";
-import { store } from "@/store";
 import App from "@/App.vue";
 
-describe("HomePage", () => {
+describe("App", () => {
   let wrapper;
   let helpers;
   let mountOptions;
   let accessToken;
 
   beforeEach(async () => {
+    // Set locale (is set from store in App.vue)
+    store.dispatch("user/SetLocale", { locale: "en" });
+
     // Suppresses [Vue Router warn]: Unexpected error when starting the router:
     // TypeError: Cannot read property '_history' of null
     router.push("/");

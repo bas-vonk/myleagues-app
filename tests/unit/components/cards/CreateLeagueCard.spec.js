@@ -5,6 +5,7 @@ import { Helpers } from "./../../helpers.js";
 import { leagueResponse } from "./../../data/responses/get_league.js";
 
 import { store } from "@/store";
+import { i18n } from "@/locale";
 import { Api } from "@/api";
 import CreateLeagueCard from "@/components/cards/CreateLeagueCard.vue";
 import CreateLeagueForm from "@/components/forms/CreateLeagueForm.vue";
@@ -14,15 +15,15 @@ describe("Create League card.", () => {
   let helpers;
 
   beforeEach(() => {
+    // Set locale
+    i18n.locale = "en";
+
     moxios.install(Api);
     helpers = new Helpers();
     wrapper = mount(CreateLeagueCard, {
       props: {},
       global: {
-        plugins: [store],
-        mocks: {
-          $t: () => "mocked text",
-        },
+        plugins: [store, i18n],
       },
     });
   });
