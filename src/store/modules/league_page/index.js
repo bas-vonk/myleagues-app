@@ -2,7 +2,6 @@ import { LeagueService } from "@/services/league";
 
 const state = {
   joinCode: undefined,
-  leagueId: undefined,
   name: undefined,
   ranking_system: undefined,
   matches: [],
@@ -12,7 +11,6 @@ const state = {
 };
 const getters = {
   joinCode: (state) => state.joinCode,
-  leagueId: (state) => state.leagueId,
   name: (state) => state.name,
   rankingSystem: (state) => state.rankingSystem,
   matches: (state) => state.matches,
@@ -33,7 +31,6 @@ const actions = {
     // Store all info in the store
     commit("setName", league.name);
     commit("setRankingSystem", league.ranking_system);
-    commit("setLeagueId", league.id);
     commit("setJoinCode", league.join_code);
     commit("setMatches", league.matches);
     commit("setPlayers", league.players);
@@ -46,9 +43,6 @@ const mutations = {
   },
   setRankingSystem(state, rankingSystem) {
     state.rankingSystem = rankingSystem;
-  },
-  setLeagueId(state, leagueId) {
-    state.leagueId = leagueId;
   },
   setJoinCode(state, joinCode) {
     state.joinCode = joinCode;
