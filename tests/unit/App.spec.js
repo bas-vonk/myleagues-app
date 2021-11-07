@@ -35,7 +35,6 @@ describe("HomePage", () => {
           $router: {
             push: jest.fn(),
           },
-          $t: () => "mocked text",
         },
       },
     };
