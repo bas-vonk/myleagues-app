@@ -8,7 +8,7 @@ import moxios from "moxios";
 import { rankingHistoryResponse } from "./../../data/responses/get_league_id_ranking_history.js";
 import { Helpers } from "./../../helpers.js";
 
-const leagueId = 1;
+const leagueId = "ffde1b13-5c83-4f32-a57d-3165e4d96101";
 
 describe("RankingChart.vue", () => {
   let helpers;
@@ -20,7 +20,7 @@ describe("RankingChart.vue", () => {
     helpers = new Helpers();
   });
   afterEach(() => {
-    moxios.uninstall(Api);
+    moxios.uninstall();
     wrapper.unmount();
   });
 

@@ -35,13 +35,13 @@
             >
               <li>
                 <a class="dropdown-item" @click="setLocale('en')">
-                  <span class="flag-icon flag-icon-gb"></span> English
-                </a>
+                  <span class="flag-icon flag-icon-gb"></span>English</a
+                >
               </li>
               <li>
                 <a class="dropdown-item" @click="setLocale('nl')">
-                  <span class="flag-icon flag-icon-nl"></span> Nederlands
-                </a>
+                  <span class="flag-icon flag-icon-nl"></span>Nederlands</a
+                >
               </li>
             </ul>
           </li>
@@ -125,9 +125,10 @@ export default {
       this.$store.dispatch("user/Logout");
       this.$router.push("login");
     },
-    toggleNavbarCollapse() {
-      // TODO: Better indicator for mobile view
-      if (window.screen.width > 991) {
+    toggleNavbarCollapse(width = window.screen.width) {
+      // TODO: Find better indicator for mobile view
+      // Now the breakpoint for the menu to go into 'hamburger mode' is simply used
+      if (width > 991) {
         return;
       }
 
@@ -153,16 +154,13 @@ export default {
   computed: {
     iso3166CountryCodeFromActiveLocale() {
       let locale = this.$root.$i18n.locale;
-      let fallBackCountryCode = "gb";
 
       let iso639to3166 = {
         nl: "nl",
         en: "gb",
       };
 
-      let iso3166CountryCode = iso639to3166[locale];
-
-      return iso3166CountryCode ? iso3166CountryCode : fallBackCountryCode;
+      return iso639to3166[locale];
     },
   },
 };

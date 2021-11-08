@@ -32,5 +32,6 @@ export default {
 <style lang="css" scoped>
 .table {
   margin-bottom: 0rem;
+  font-size: 0.9em;
 }
 </style>

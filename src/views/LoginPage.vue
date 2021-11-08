@@ -62,11 +62,11 @@ export default {
         this.$store.dispatch("setIsGlobalLoading", true, { root: true });
 
         // Get the leagues for a user and navigate to the home page
-        await store.dispatch("user_leagues/GetLeaguesForUserAndAdd");
+        await this.$store.dispatch("user_leagues/GetLeaguesForUserAndAdd");
         this.navigateToHome();
       } catch (error) {
-        this.store.dispatch("setIsGlobalError", true, { root: true });
-        this.store.dispatch("setGlobalErrorMessage", error.message, {
+        this.$store.dispatch("setIsGlobalError", true, { root: true });
+        this.$store.dispatch("setGlobalErrorMessage", error.message, {
           root: true,
         });
       } finally {

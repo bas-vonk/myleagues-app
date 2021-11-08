@@ -59,8 +59,18 @@ export default {
       }
 
       let element = this.$refs["card-content"];
-      let maxScrollTop = element.scrollHeight - element.offsetHeight;
 
+      // scrollTop: the number of pixels that an element's content is scrolled vertically.
+      // scrollHeight: a measurement of the height of an element's content,
+      //               including content not visible on the screen due to overflow.
+      // offsetHeight: he height of an element, including vertical padding and borders
+
+      let maxScrollTop = element.scrollHeight - element.offsetHeight;
+      let scrollTop = element.scrollTop;
+
+      this.activateIcons(scrollTop, maxScrollTop);
+    },
+    activateIcons(scrollTop, maxScrollTop) {
       // If there's nothing to scroll, do nothing
       if (maxScrollTop == 0) {
         this.showLessIcon = false;
@@ -69,19 +79,19 @@ export default {
       }
 
       // Scrolled down a little bit
-      if (element.scrollTop > 0) {
+      if (scrollTop > 0) {
         this.showLessIcon = true;
 
-        if (element.scrollTop === maxScrollTop) {
+        if (scrollTop === maxScrollTop) {
           this.showMoreIcon = false;
         }
       }
 
       // Not yet at the bottom
-      if (element.scrollTop < maxScrollTop) {
+      if (scrollTop < maxScrollTop) {
         this.showMoreIcon = true;
 
-        if (element.scrollTop === 0) {
+        if (scrollTop === 0) {
           this.showLessIcon = false;
         }
       }

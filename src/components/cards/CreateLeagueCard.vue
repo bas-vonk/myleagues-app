@@ -51,7 +51,7 @@ export default {
   methods: {
     async submitForm(formData) {
       if (!formData.leagueName || !formData.rankingSystem) {
-        this.isError = true;
+        this.isErrorView = true;
         this.errorMessage = "Fill in the form.";
         return;
       }

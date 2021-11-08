@@ -87,7 +87,6 @@ export default {
       if (this.isAlreadyInLeague(formData)) {
         this.isErrorView = true;
         this.errorMessage = "You are already in this league.";
-        this.joinCode = undefined;
       } else {
         this.isJoinLeagueView = true;
       }
@@ -106,7 +105,7 @@ export default {
 
       let params = { "filter[join_code]": joinCode };
 
-      const responseData = await leagueService.read("", params);
+      const responseData = await leagueService.read({ queryParams: params });
       return responseData.data.attributes;
     },
     resetView() {
