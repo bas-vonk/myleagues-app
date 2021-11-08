@@ -15,12 +15,13 @@ async function getAnchorElementByText(wrapper, text) {
 describe("The Header", () => {
   let wrapper;
   let username;
+  let overlayDiv;
 
   beforeEach(() => {
     username = "bas";
 
     // Mock the overlay
-    const overlayDiv = document.createElement("div");
+    overlayDiv = document.createElement("div");
     overlayDiv.id = "overlay";
     overlayDiv.style.display = "none";
     document.body.appendChild(overlayDiv);
@@ -39,7 +40,6 @@ describe("The Header", () => {
           $router: {
             push: jest.fn(),
           },
-          $t: () => "mocked text",
         },
       },
     });
@@ -68,5 +68,26 @@ describe("The Header", () => {
     await logoutButton.trigger("click");
 
     expect(wrapper.vm.$router.push).toHaveBeenCalledWith("login");
+  });
+
+  it("Shall lock the app when the hamburger menu is toggled open.", async () => {
+    var navbarNavDropdown = document.querySelector("#navbarNavDropdown");
+    var overlay = document.querySelector("#overlay");
+
+    // When the screen is wide enough there is no hamburger menu, so do nothing
+    let result = wrapper.vm.toggleNavbarCollapse(1000);
+    expect(result).toBe(undefined);
+
+    // Start in closed position and toggle the collapse
+    wrapper.vm.toggleNavbarCollapse(800);
+    expect(document.body.classList).toContain("fixed-position");
+    expect(overlay.style.display).toBe("block");
+    expect(navbarNavDropdown.classList).toContain("show");
+
+    // Close the menu again and assert all relevant classes are removed or changed
+    wrapper.vm.toggleNavbarCollapse(800);
+    expect(document.body.classList).not.toContain("fixed-position");
+    expect(overlay.style.display).toBe("none");
+    expect(navbarNavDropdown.classList).not.toContain("show");
   });
 });
