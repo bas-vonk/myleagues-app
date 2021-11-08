@@ -5,7 +5,6 @@ import { UserService } from "@/services/user";
 const state = {
   accessToken: Cookies.get("accessToken"),
   username: undefined,
-  password: undefined,
   emailAddress: undefined,
   locale: Cookies.get("locale"),
   userService: new UserService(),
@@ -66,14 +65,12 @@ const actions = {
 
     // Grab the username and email adress from the JWT token
     let decoded_token = jwt_decode(accessToken);
-    commit("setEmailAddress", decoded_token.email_address);
+    commit("setEmailAddress", decoded_token.email);
     commit("setUsername", decoded_token.username);
   },
   SetLocale({ commit }, payload) {
-    let locale = payload.locale;
-
-    commit("locale", locale);
-    Cookies.set("locale", locale, { expires: 365 });
+    commit("setLocale", payload.locale);
+    Cookies.set("locale", payload.locale, { expires: 365 });
   },
 };
 const mutations = {
@@ -82,9 +79,6 @@ const mutations = {
   },
   setUsername(state, username) {
     state.username = username;
-  },
-  setPassword(state, password) {
-    state.password = password;
   },
   setEmailAddress(state, emailAddress) {
     state.emailAddress = emailAddress;

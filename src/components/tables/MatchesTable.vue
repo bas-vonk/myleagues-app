@@ -61,7 +61,7 @@ export default {
 
 <style lang="css" scoped>
 .table {
-  font-size: 1rem;
+  font-size: 0.9em;
 }
 .match-enter-from {
   opacity: 1;

@@ -22,7 +22,6 @@ import LoadingSpinner from "@/components/ui/LoadingSpinner.vue";
 import ErrorMessage from "@/components/ui/ErrorMessage.vue";
 
 import { mapGetters } from "vuex";
-import { store } from "@/store";
 
 export default {
   name: "App",
@@ -44,10 +43,10 @@ export default {
     });
   },
   async mounted() {
-    if (store.getters["user/accessToken"]) {
+    if (this.$store.getters["user/accessToken"]) {
       // Parse the JWT token and store info in the application state
-      store.dispatch("user/StoreAccessTokenData", {
-        accessToken: store.getters["user/accessToken"],
+      this.$store.dispatch("user/StoreAccessTokenData", {
+        accessToken: this.$store.getters["user/accessToken"],
       });
 
       try {

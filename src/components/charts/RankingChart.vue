@@ -50,7 +50,7 @@ export default {
           plugins: {
             legend: {
               display: true,
-              position: "right",
+              position: "bottom",
             },
             tooltip: {
               enabled: true,
