@@ -3,8 +3,8 @@ import MatchesTable from "@/components/tables/MatchesTable.vue";
 
 describe("MatchesTable.vue", () => {
   it("Shall render a table with all matches.", () => {
-    const gmt_timestamp = "Sun, 31 Oct 2021 23:00:00 GMT";
-    const displayed_timestamp = "2021-11-01";
+    const gmt_timestamp = "Sun, 31 Oct 2021 12:00:00 GMT";
+    const displayed_timestamp = "2021-10-31";
     const matches = [
       {
         date: gmt_timestamp,
