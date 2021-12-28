@@ -3,6 +3,7 @@
     v-if="isLoggedIn"
     :leagues="leagues"
     :username="username"
+    :picture="picture"
   ></the-header>
   <loading-spinner v-if="isGlobalLoading"></loading-spinner>
   <error-message
@@ -20,6 +21,8 @@
 import TheHeader from "@/components/ui/TheHeader.vue";
 import LoadingSpinner from "@/components/ui/LoadingSpinner.vue";
 import ErrorMessage from "@/components/ui/ErrorMessage.vue";
+
+import { BaseService } from "@/services/base.js";
 
 import { mapGetters } from "vuex";
 
@@ -41,6 +44,20 @@ export default {
     window.addEventListener("resize", () => {
       this.setWindowHeight();
     });
+
+    // Probe whether the backend is alive (also used to activate the backend in App Engine)
+    let baseService = new BaseService();
+
+    // Call the service
+    baseService
+      .call_healthcheck()
+      .then(() => null)
+      .catch(() => {
+        this.$store.dispatch("setIsGlobalError", true, { root: true });
+        this.$store.dispatch("setGlobalErrorMessage", "API unavailable.", {
+          root: true,
+        });
+      });
   },
   async mounted() {
     if (this.$store.getters["user/accessToken"]) {
@@ -92,6 +109,7 @@ export default {
       globalErrorMessage: "globalErrorMessage",
       isLoggedIn: "user/isLoggedIn",
       username: "user/username",
+      picture: "user/picture",
       leagues: "user_leagues/leagues",
     }),
   },

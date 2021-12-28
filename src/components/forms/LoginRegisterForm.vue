@@ -2,10 +2,10 @@
   <form v-on:submit.prevent="submitForm">
     <div class="form-group">
       <input
-        type="email"
+        type="text"
         class="form-control"
-        placeholder="Email address"
-        v-model="emailAddress"
+        placeholder="Username"
+        v-model="username"
       />
     </div>
     <div class="form-group">
@@ -24,13 +24,11 @@
         v-model="passwordConfirmation"
       />
     </div>
-    <div class="form-group" v-if="showRegisterFields">
-      <input
-        type="text"
-        class="form-control"
-        placeholder="Username"
-        v-model="username"
-      />
+    <div class="alert alert-warning" v-if="showRegisterFields">
+      <small
+        >Forgot password functionality is not available. Consider using SSO
+        instead.</small
+      >
     </div>
     <div class="alert alert-warning" v-if="isError">
       {{ errorMessage }}
@@ -51,20 +49,18 @@ export default {
   data() {
     return {
       mode: "login",
-      emailAddress: undefined,
+      username: undefined,
       password: undefined,
       passwordConfirmation: undefined,
-      username: undefined,
     };
   },
   methods: {
     submitForm() {
       this.$emit("submit", {
         mode: this.mode,
-        emailAddress: this.emailAddress,
+        username: this.username,
         password: this.password,
         passwordConfirmation: this.passwordConfirmation,
-        username: this.username,
       });
     },
     toggleMode() {

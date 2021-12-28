@@ -5,14 +5,14 @@ import { UserService } from "@/services/user";
 const state = {
   accessToken: Cookies.get("accessToken"),
   username: undefined,
-  emailAddress: undefined,
+  picture: undefined,
   locale: Cookies.get("locale"),
   userService: new UserService(),
 };
 const getters = {
   accessToken: (state) => state.accessToken,
   isLoggedIn: (state) => !!state.accessToken,
-  emailAddress: (state) => state.emailAddress,
+  picture: (state) => state.picture,
   username: (state) => state.username,
   locale: (state) => state.locale,
 };
@@ -27,7 +27,7 @@ const actions = {
   async Login({ dispatch }, payload) {
     // Prepare the params for the API call
     let params = {
-      email: payload.emailAddress,
+      username: payload.username,
       password: payload.password,
     };
 
@@ -42,7 +42,6 @@ const actions = {
   async Register({ dispatch }, payload) {
     // Prepare the params for the API call
     let params = {
-      email: payload.emailAddress,
       username: payload.username,
       password: payload.password,
     };
@@ -63,10 +62,10 @@ const actions = {
     commit("setAccessToken", accessToken);
     Cookies.set("accessToken", accessToken, { expires: 1 });
 
-    // Grab the username and email adress from the JWT token
+    // Grab the username and picture from the JWT token
     let decoded_token = jwt_decode(accessToken);
-    commit("setEmailAddress", decoded_token.email);
     commit("setUsername", decoded_token.username);
+    commit("setPicture", decoded_token.picture);
   },
   SetLocale({ commit }, payload) {
     commit("setLocale", payload.locale);
@@ -80,8 +79,8 @@ const mutations = {
   setUsername(state, username) {
     state.username = username;
   },
-  setEmailAddress(state, emailAddress) {
-    state.emailAddress = emailAddress;
+  setPicture(state, picture) {
+    state.picture = picture;
   },
   unsetAccessToken(state) {
     state.accessToken = null;

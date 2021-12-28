@@ -88,7 +88,8 @@
               role="button"
               data-bs-toggle="dropdown"
             >
-              {{ username }}
+              <img v-if="picture" :src="picture" />
+              <span v-else>{{ username }}</span>
             </a>
             <ul
               class="dropdown-menu dropdown-menu-end"
@@ -107,7 +108,7 @@
 
 <script>
 export default {
-  props: ["leagues", "username"],
+  props: ["leagues", "username", "picture"],
   data() {
     return {
       navbarIsCollapsed: true,
@@ -167,6 +168,11 @@ export default {
 </script>
 
 <style>
+img {
+  height: 1.5rem !important;
+  /* margin-top: -0.75rem !important; */
+  /* margin-bottom: -0.75rem !important; */
+}
 .hover {
   position: fixed;
   z-index: 2000;
