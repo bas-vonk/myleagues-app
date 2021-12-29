@@ -18,6 +18,9 @@ export default {
       accessToken: response.access_token,
     });
 
+    // Get the leagues for a user
+    await store.dispatch("user_leagues/GetLeaguesForUserAndAdd");
+
     router.push({ name: "home" });
   },
 };
