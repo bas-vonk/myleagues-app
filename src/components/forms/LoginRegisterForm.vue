@@ -25,10 +25,8 @@
       />
     </div>
     <div class="alert alert-warning" v-if="showRegisterFields">
-      <small
-        >Forgot password functionality is not available. Consider using SSO
-        instead.</small
-      >
+      Forgot password functionality is not available. Consider using SSO
+      instead.
     </div>
     <div class="alert alert-warning" v-if="isError">
       {{ errorMessage }}
@@ -85,6 +83,7 @@ export default {
 <style lang="css" scoped>
 .alert {
   width: 100%;
+  font-size: 0.8rem;
 }
 .form-group {
   width: 100%;

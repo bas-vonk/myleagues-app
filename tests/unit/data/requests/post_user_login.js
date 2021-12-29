@@ -1,4 +1,4 @@
 export const userLoginRequest = {
-  email: "root@root",
+  username: "root",
   password: "root",
 };

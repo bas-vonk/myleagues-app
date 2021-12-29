@@ -53,7 +53,7 @@ export default {
       let response = await samlService.get_request_uri("google");
 
       // Redirect to the SAML provider
-      location = response.request_uri;
+      window.location.href = response.request_uri;
     },
     async login(formData) {
       try {

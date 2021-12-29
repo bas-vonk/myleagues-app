@@ -2,21 +2,23 @@
 
 <script>
 import { SamlService } from "@/services/saml";
+import { store } from "@/store";
+import { router } from "@/router";
 
 export default {
   data() {
     return {};
   },
-  async created() {
+  async beforeRouteEnter(to) {
     let samlService = new SamlService();
 
-    let response = await samlService.callback(this.$route.query);
+    let response = await samlService.callback(to.query);
 
-    this.$store.dispatch("user/StoreAccessTokenData", {
+    store.dispatch("user/StoreAccessTokenData", {
       accessToken: response.access_token,
     });
 
-    this.$router.push({ name: "home" });
+    router.push({ name: "home" });
   },
 };
 </script>

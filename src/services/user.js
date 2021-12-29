@@ -9,14 +9,6 @@ export class UserService extends BaseService {
     return this.client.post(`${this.namespace}/login`, params);
   }
 
-  login_google() {
-    return this.client.get(`${this.namespace}/login_google`);
-  }
-
-  callback(params) {
-    return this.client.get(`${this.namespace}/callback`, { params });
-  }
-
   register(params) {
     return this.client.post(`${this.namespace}/register`, params);
   }
