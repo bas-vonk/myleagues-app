@@ -78,7 +78,34 @@ describe("App", () => {
     wrapper = mount(App, mountOptions);
 
     expect(store.getters["user/username"]).toBe("root");
-    expect(store.getters["user/emailAddress"]).toBe("root@root");
+  });
+
+  it("Shall probe the backend to check whether it's alive.", async () => {
+    // Mock the API call
+    moxios.stubRequest(`healthcheck`, {
+      status: 200,
+      response: {},
+    });
+
+    wrapper = mount(App, mountOptions);
+
+    await helpers.awaitMoxios();
+
+    expect(store.getters["isGlobalError"]).toBe(false);
+  });
+
+  it("Shall throw an error when the backend is not alive.", async () => {
+    // Mock the API call
+    moxios.stubRequest(`healthcheck`, {
+      status: 500,
+      response: {},
+    });
+
+    wrapper = mount(App, mountOptions);
+
+    await helpers.awaitMoxios();
+
+    expect(store.getters["isGlobalError"]).toBe(true);
   });
 
   it("Shall load the leagues for a user when the user is already logged in.", async () => {

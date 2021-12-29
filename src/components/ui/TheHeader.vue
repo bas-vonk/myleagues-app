@@ -99,6 +99,9 @@
               </li>
             </ul>
           </li>
+          <li>
+            <img v-if="picture" :src="picture" />
+          </li>
         </ul>
       </div>
     </div>
@@ -107,7 +110,7 @@
 
 <script>
 export default {
-  props: ["leagues", "username"],
+  props: ["leagues", "username", "picture"],
   data() {
     return {
       navbarIsCollapsed: true,
@@ -167,6 +170,12 @@ export default {
 </script>
 
 <style>
+img {
+  height: 2.5rem !important;
+  border-color: black;
+  border-width: thin;
+  border-style: solid;
+}
 .hover {
   position: fixed;
   z-index: 2000;

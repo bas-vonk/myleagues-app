@@ -5,4 +5,8 @@ export class BaseService {
     this.namespace = namespace;
     this.client = Api;
   }
+
+  call_healthcheck() {
+    return this.client.get("healthcheck");
+  }
 }

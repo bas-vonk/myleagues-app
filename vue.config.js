@@ -3,7 +3,7 @@ module.exports = {
     host: "0.0.0.0",
     hot: true,
     disableHostCheck: true,
-    https: false,
+    https: true,
   },
   configureWebpack: {
     output: {

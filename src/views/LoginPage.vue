@@ -1,6 +1,9 @@
 <template>
   <div class="container">
     <div class="h1" id="appName">MYLEAGUES</div>
+    <div id="separator">Social login</div>
+    <google-login-icon @click="loginWithGoogle"></google-login-icon>
+    <div id="separator">or</div>
     <login-register-form
       :isError="isError"
       :errorMessage="errorMessage"
@@ -12,12 +15,16 @@
 
 <script>
 import LoginRegisterForm from "@/components/forms/LoginRegisterForm.vue";
+import GoogleLoginIcon from "@/components/icons/GoogleLoginIcon.vue";
+
+import { SamlService } from "@/services/saml";
 
 import { store } from "@/store";
 
 export default {
   components: {
     LoginRegisterForm,
+    GoogleLoginIcon,
   },
   data() {
     return {
@@ -39,6 +46,15 @@ export default {
     resetView() {
       (this.isError = false), (this.errorMessage = false);
     },
+    async loginWithGoogle() {
+      let samlService = new SamlService();
+
+      // Get the redirect URI for the SAML provider
+      let response = await samlService.get_request_uri("google");
+
+      // Redirect to the SAML provider
+      window.location.href = response.request_uri;
+    },
     async login(formData) {
       try {
         // Start spinner
@@ -46,7 +62,7 @@ export default {
 
         // Dispatch the login action
         await this.$store.dispatch("user/Login", {
-          emailAddress: formData.emailAddress,
+          username: formData.username,
           password: formData.password,
         });
       } catch (error) {
@@ -86,9 +102,8 @@ export default {
 
         // Register the user and go to the home page.
         await this.$store.dispatch("user/Register", {
-          emailAddress: formData.emailAddress,
-          password: formData.password,
           username: formData.username,
+          password: formData.password,
         });
         this.navigateToHome();
       } catch (error) {
@@ -115,12 +130,36 @@ export default {
 
 <style lang="css" scoped>
 .container {
-  padding-top: 20%;
+  padding-top: 10rem;
   width: 18rem;
   height: calc(var(--vh, 1vh) * 100);
   padding: auto;
   margin: auto;
 }
+#separator {
+  padding-top: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  font-size: 1rem;
+  font-weight: 500;
+  color: white;
+  text-shadow: 1px 1px #000000;
+  text-align: center;
+}
+#separator:before,
+#separator:after {
+  content: "";
+  flex: 1 1;
+  border-bottom: 1px solid #fff;
+  margin: auto;
+}
+#separator:before {
+  margin-right: 10px;
+}
+#separator:after {
+  margin-left: 10px;
+}
+
 #appName {
   font-size: 2rem;
   margin: auto;

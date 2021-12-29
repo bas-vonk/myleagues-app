@@ -63,7 +63,7 @@ describe("LoginPage", () => {
     });
 
     // Fill in the form
-    wrapper.findAll("input").at(0).setValue(userLoginRequest.email);
+    wrapper.findAll("input").at(0).setValue(userLoginRequest.username);
     wrapper.findAll("input").at(1).setValue(userLoginRequest.password);
 
     // Trigger the submit event
@@ -86,6 +86,31 @@ describe("LoginPage", () => {
     );
   });
 
+  it("Shall redirect to the Google Auth server.", async () => {
+    let redirect_uri = "https://request_uri";
+
+    moxios.stubRequest(`saml/get_request_uri/google`, {
+      status: 200,
+      response: {
+        request_uri: redirect_uri,
+      },
+    });
+
+    global.window = Object.create(window);
+    Object.defineProperty(window, "location", {
+      value: {
+        href: "http://localhost",
+      },
+    });
+
+    // Click the Google icon and wait
+    wrapper.find("#googleIcon").trigger("click");
+    await helpers.awaitMoxios();
+
+    // Assert the changed location
+    expect(window.location.href).toEqual(redirect_uri);
+  });
+
   it("Shall render an error message upon failed login.", async () => {
     // Define the error message
     let errorMessage = "Something went wrong.";
@@ -97,7 +122,7 @@ describe("LoginPage", () => {
     });
 
     // Fill in the form
-    wrapper.findAll("input").at(0).setValue(userLoginRequest.email);
+    wrapper.findAll("input").at(0).setValue(userLoginRequest.username);
     wrapper.findAll("input").at(1).setValue(userLoginRequest.password);
 
     // Trigger the submit event
@@ -119,10 +144,9 @@ describe("LoginPage", () => {
     await wrapper.find("#modeSwitchText").trigger("click");
 
     // Fill in the form
-    wrapper.findAll("input").at(0).setValue(userCreateRequest.email);
+    wrapper.findAll("input").at(0).setValue(userCreateRequest.username);
     wrapper.findAll("input").at(1).setValue(userCreateRequest.password);
     wrapper.findAll("input").at(2).setValue(userCreateRequest.password);
-    wrapper.findAll("input").at(3).setValue(userCreateRequest.username);
 
     // Trigger the submit event
     await wrapper.find("form").trigger("submit.prevent");
@@ -153,10 +177,9 @@ describe("LoginPage", () => {
     await wrapper.find("#modeSwitchText").trigger("click");
 
     // Fill in the form
-    wrapper.findAll("input").at(0).setValue(userCreateRequest.email);
+    wrapper.findAll("input").at(0).setValue(userCreateRequest.username);
     wrapper.findAll("input").at(1).setValue(userCreateRequest.password);
     wrapper.findAll("input").at(2).setValue(userCreateRequest.password);
-    wrapper.findAll("input").at(3).setValue(userCreateRequest.username);
 
     // Trigger the submit event
     await wrapper.find("form").trigger("submit.prevent");
@@ -172,10 +195,9 @@ describe("LoginPage", () => {
     await wrapper.find("#modeSwitchText").trigger("click");
 
     // Fill in the form
-    wrapper.findAll("input").at(0).setValue(userCreateRequest.email);
+    wrapper.findAll("input").at(0).setValue(userCreateRequest.username);
     wrapper.findAll("input").at(1).setValue(userCreateRequest.password);
     wrapper.findAll("input").at(2).setValue("different_confirmation_password");
-    wrapper.findAll("input").at(3).setValue(userCreateRequest.username);
 
     // Trigger the submit event
     await wrapper.find("form").trigger("submit.prevent");

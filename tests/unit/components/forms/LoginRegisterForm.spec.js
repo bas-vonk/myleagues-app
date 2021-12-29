@@ -4,7 +4,6 @@ import LoginRegisterForm from "@/components/forms/LoginRegisterForm.vue";
 describe("LoginRegisterForm.vue", () => {
   let wrapper;
 
-  let emailAddress = "root@root";
   let username = "root";
   let password = "root";
   let passwordConfirmation = "root";
@@ -29,7 +28,7 @@ describe("LoginRegisterForm.vue", () => {
 
   it("Shall have a form that collects and emits login data.", async () => {
     // Fill in the form
-    await wrapper.findAll("input").at(0).setValue(emailAddress);
+    await wrapper.findAll("input").at(0).setValue(username);
     await wrapper.findAll("input").at(1).setValue(password);
 
     // Trigger the submit event
@@ -42,10 +41,9 @@ describe("LoginRegisterForm.vue", () => {
     expect(emittedEvents).toHaveProperty("submit");
     expect(emittedEvents.submit[0][0]).toStrictEqual({
       mode: mode,
-      emailAddress: emailAddress,
+      username: username,
       password: password,
       passwordConfirmation: undefined,
-      username: undefined,
     });
   });
 
@@ -56,10 +54,9 @@ describe("LoginRegisterForm.vue", () => {
     await wrapper.find("small").trigger("click");
 
     // Fill in the form
-    await wrapper.findAll("input").at(0).setValue(emailAddress);
+    await wrapper.findAll("input").at(0).setValue(username);
     await wrapper.findAll("input").at(1).setValue(password);
     await wrapper.findAll("input").at(2).setValue(passwordConfirmation);
-    await wrapper.findAll("input").at(3).setValue(username);
 
     // Trigger the submit event
     await wrapper.find("form").trigger("submit.prevent");
@@ -71,10 +68,9 @@ describe("LoginRegisterForm.vue", () => {
     expect(emittedEvents).toHaveProperty("submit");
     expect(emittedEvents.submit[0][0]).toStrictEqual({
       mode: "register",
-      emailAddress: emailAddress,
+      username: username,
       password: password,
       passwordConfirmation: passwordConfirmation,
-      username: username,
     });
   });
 });
