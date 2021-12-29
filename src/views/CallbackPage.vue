@@ -1,16 +1,16 @@
 <template></template>
 
 <script>
-import { UserService } from "@/services/user";
+import { SamlService } from "@/services/saml";
 
 export default {
   data() {
     return {};
   },
   async created() {
-    let userService = new UserService();
+    let samlService = new SamlService();
 
-    let response = await userService.callback(this.$route.query);
+    let response = await samlService.callback(this.$route.query);
 
     this.$store.dispatch("user/StoreAccessTokenData", {
       accessToken: response.access_token,

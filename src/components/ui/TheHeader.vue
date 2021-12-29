@@ -88,8 +88,7 @@
               role="button"
               data-bs-toggle="dropdown"
             >
-              <img v-if="picture" :src="picture" />
-              <span v-else>{{ username }}</span>
+              {{ username }}
             </a>
             <ul
               class="dropdown-menu dropdown-menu-end"
@@ -99,6 +98,9 @@
                 <a class="dropdown-item" @click="logout">Logout</a>
               </li>
             </ul>
+          </li>
+          <li>
+            <img v-if="picture" :src="picture" />
           </li>
         </ul>
       </div>
@@ -169,9 +171,10 @@ export default {
 
 <style>
 img {
-  height: 1.5rem !important;
-  /* margin-top: -0.75rem !important; */
-  /* margin-bottom: -0.75rem !important; */
+  height: 2.5rem !important;
+  border-color: black;
+  border-width: thin;
+  border-style: solid;
 }
 .hover {
   position: fixed;

@@ -17,7 +17,7 @@
 import LoginRegisterForm from "@/components/forms/LoginRegisterForm.vue";
 import GoogleLoginIcon from "@/components/icons/GoogleLoginIcon.vue";
 
-import { UserService } from "@/services/user";
+import { SamlService } from "@/services/saml";
 
 import { store } from "@/store";
 
@@ -47,10 +47,12 @@ export default {
       (this.isError = false), (this.errorMessage = false);
     },
     async loginWithGoogle() {
-      let userService = new UserService();
+      let samlService = new SamlService();
 
-      let response = await userService.login_google();
+      // Get the redirect URI for the SAML provider
+      let response = await samlService.get_request_uri("google");
 
+      // Redirect to the SAML provider
       location = response.request_uri;
     },
     async login(formData) {

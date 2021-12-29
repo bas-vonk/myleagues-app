@@ -47,8 +47,6 @@ export default {
 
     // Probe whether the backend is alive (also used to activate the backend in App Engine)
     let baseService = new BaseService();
-
-    // Call the service
     baseService
       .call_healthcheck()
       .then(() => null)
