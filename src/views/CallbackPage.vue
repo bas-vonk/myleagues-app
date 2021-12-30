@@ -12,6 +12,10 @@ export default {
   async beforeRouteEnter(to) {
     let samlService = new SamlService();
 
+    // Start spinner
+    store.dispatch("setIsGlobalLoading", true, { root: true });
+
+    // Process the callback in the backend
     let response = await samlService.callback(to.query);
 
     store.dispatch("user/StoreAccessTokenData", {
@@ -19,6 +23,9 @@ export default {
     });
 
     router.push({ name: "home" });
+
+    // Stop spinner
+    store.dispatch("setIsGlobalLoading", false, { root: true });
   },
 };
 </script>

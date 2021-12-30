@@ -49,6 +49,9 @@ export default {
     async loginWithGoogle() {
       let samlService = new SamlService();
 
+      // Start spinner
+      this.$store.dispatch("setIsGlobalLoading", true, { root: true });
+
       // Get the redirect URI for the SAML provider
       let response = await samlService.get_request_uri("google");
 
