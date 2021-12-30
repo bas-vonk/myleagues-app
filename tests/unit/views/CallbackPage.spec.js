@@ -4,6 +4,8 @@ import moxios from "moxios";
 import { Api } from "@/api";
 import { Helpers } from "./../helpers.js";
 
+import { leaguesResponse } from "./../data/responses/get_user_leagues.js";
+
 import { store } from "@/store";
 import { router } from "@/router";
 
@@ -37,11 +39,18 @@ describe("CallbackPage", () => {
       query: queryParams,
     };
 
+    // Mock the SAML call
     moxios.stubRequest(`saml/callback?test=test`, {
       status: 200,
       response: {
         access_token: accessToken,
       },
+    });
+
+    // Mock the user leagues call
+    moxios.stubRequest(`user/leagues`, {
+      status: 200,
+      response: leaguesResponse,
     });
 
     // Await for the backend to be called
@@ -52,8 +61,6 @@ describe("CallbackPage", () => {
     expect(store.getters["user/accessToken"]).toBe(accessToken);
 
     // Expect the query params to be forwarded to the backend
-    expect(moxios.requests.mostRecent().config.params).toStrictEqual(
-      queryParams
-    );
+    expect(moxios.requests.at(0).config.params).toStrictEqual(queryParams);
   });
 });
