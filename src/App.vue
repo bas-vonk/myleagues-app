@@ -108,8 +108,16 @@ export default {
       isLoggedIn: "user/isLoggedIn",
       username: "user/username",
       picture: "user/picture",
+      accessToken: "user/accessToken",
       leagues: "user_leagues/leagues",
     }),
+  },
+  watch: {
+    accessToken(newAccessToken) {
+      if (newAccessToken !== null) {
+        this.$store.dispatch("user/updatePicture");
+      }
+    },
   },
 };
 </script>

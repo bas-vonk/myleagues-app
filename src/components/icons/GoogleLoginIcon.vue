@@ -149,5 +149,6 @@ export default {};
 svg {
   margin-top: 1rem;
   cursor: pointer;
+  float: left;
 }
 </style>

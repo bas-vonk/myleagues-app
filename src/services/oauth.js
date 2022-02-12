@@ -1,8 +1,8 @@
 import { BaseService } from "@/services/base.js";
 
-export class SamlService extends BaseService {
+export class OAuthService extends BaseService {
   constructor() {
-    super("saml");
+    super("oauth");
   }
 
   get_request_uri(provider_name) {

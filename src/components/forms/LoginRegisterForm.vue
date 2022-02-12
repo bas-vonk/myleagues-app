@@ -24,9 +24,8 @@
         v-model="passwordConfirmation"
       />
     </div>
-    <div class="alert alert-warning" v-if="showRegisterFields">
-      Forgot password functionality is not available. Consider using SSO
-      instead.
+    <div class="alert alert-warning" v-if="showWarningUseSSOInstead">
+      Forgot password functionality is not available. Use social login instead.
     </div>
     <div class="alert alert-warning" v-if="isError">
       {{ errorMessage }}
@@ -50,10 +49,12 @@ export default {
       username: undefined,
       password: undefined,
       passwordConfirmation: undefined,
+      showWarningUseSSOInstead: false,
     };
   },
   methods: {
     submitForm() {
+      this.showWarningUseSSOInstead = false;
       this.$emit("submit", {
         mode: this.mode,
         username: this.username,
@@ -64,6 +65,10 @@ export default {
     toggleMode() {
       this.$emit("toggleMode");
       this.mode = this.mode !== "login" ? "login" : "register";
+
+      if (this.mode === "register") {
+        this.showWarningUseSSOInstead = true;
+      }
     },
   },
   computed: {

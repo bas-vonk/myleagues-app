@@ -2,7 +2,14 @@
   <div class="container">
     <div class="h1" id="appName">MYLEAGUES</div>
     <div id="separator">Social login</div>
-    <google-login-icon @click="loginWithGoogle"></google-login-icon>
+    <div class="sso-option" @click="loginWithOAuth('google')">
+      Google
+      <!-- <google-login-icon></google-login-icon> -->
+    </div>
+    <div class="sso-option" @click="loginWithOAuth('microsoft')">
+      Microsoft
+      <!-- <microsoft-login-icon></microsoft-login-icon> -->
+    </div>
     <div id="separator">or</div>
     <login-register-form
       :isError="isError"
@@ -16,8 +23,9 @@
 <script>
 import LoginRegisterForm from "@/components/forms/LoginRegisterForm.vue";
 import GoogleLoginIcon from "@/components/icons/GoogleLoginIcon.vue";
+import MicrosoftLoginIcon from "@/components/icons/MicrosoftLoginIcon.vue";
 
-import { SamlService } from "@/services/saml";
+import { OAuthService } from "@/services/oauth";
 
 import { store } from "@/store";
 
@@ -25,6 +33,7 @@ export default {
   components: {
     LoginRegisterForm,
     GoogleLoginIcon,
+    MicrosoftLoginIcon,
   },
   data() {
     return {
@@ -46,16 +55,16 @@ export default {
     resetView() {
       (this.isError = false), (this.errorMessage = false);
     },
-    async loginWithGoogle() {
-      let samlService = new SamlService();
+    async loginWithOAuth(providerName) {
+      let oauthService = new OAuthService();
 
       // Start spinner
       this.$store.dispatch("setIsGlobalLoading", true, { root: true });
 
-      // Get the redirect URI for the SAML provider
-      let response = await samlService.get_request_uri("google");
+      // Get the redirect URI for the OAuth provider
+      let response = await oauthService.get_request_uri(providerName);
 
-      // Redirect to the SAML provider
+      // Redirect to the OAAuth provider
       window.location.href = response.request_uri;
     },
     async login(formData) {
@@ -138,6 +147,17 @@ export default {
   height: calc(var(--vh, 1vh) * 100);
   padding: auto;
   margin: auto;
+  text-align: center;
+}
+.sso-option {
+  width: 100%;
+  height: 2rem;
+  background-color: white;
+  margin: 0.5rem auto;
+  text-align: center;
+  vertical-align: middle;
+  padding: 0.25rem;
+  cursor: pointer;
 }
 #separator {
   padding-top: 0.5rem;

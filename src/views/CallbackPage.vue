@@ -1,7 +1,7 @@
 <template><div></div></template>
 
 <script>
-import { SamlService } from "@/services/saml";
+import { OAuthService } from "@/services/oauth";
 import { store } from "@/store";
 import { router } from "@/router";
 
@@ -10,13 +10,13 @@ export default {
     return {};
   },
   async beforeRouteEnter(to) {
-    let samlService = new SamlService();
+    let oauthService = new OAuthService();
 
     // Start spinner
     store.dispatch("setIsGlobalLoading", true, { root: true });
 
     // Process the callback in the backend
-    let response = await samlService.callback(to.query);
+    let response = await oauthService.callback(to.query);
 
     store.dispatch("user/StoreAccessTokenData", {
       accessToken: response.access_token,

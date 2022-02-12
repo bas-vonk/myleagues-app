@@ -54,6 +54,10 @@ const actions = {
       accessToken: responseData.access_token,
     });
   },
+  async updatePicture({ commit }) {
+    const picture = await state.userService.get_picture();
+    commit("setPicture", picture);
+  },
   StoreAccessTokenData({ commit }, payload) {
     let accessToken = payload.accessToken;
 

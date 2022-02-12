@@ -20,4 +20,8 @@ export class UserService extends BaseService {
   get_leagues_for_user() {
     return this.client.get(`${this.namespace}/leagues`);
   }
+
+  get_picture() {
+    return this.client.get(`${this.namespace}/picture`);
+  }
 }
